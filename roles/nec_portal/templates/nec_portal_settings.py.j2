@@ -3,10 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 # dashboard server's root url.
 DASHBOARD_SERVER = '{{ kibana_url.portal }}'
 
-# Announcement service server's top url
-ANNOUNCEMENT_SERVER = '{{ announcement.url }}'
-ANNOUNCEMENT_GROUP_NAME = _('Announcement')
-
 LOG_MANAGEMENT_GROUP_NAME = _('Log Management')
 LINK_GROUP_NAME = _('Link')
 
@@ -189,6 +185,9 @@ REGION_CONTRACTS_LINKS = [
 
 {% if is_use_self_identity %}
 KEYSTONE_ADMIN_SETTING = {
+{% if is_fix_region %}
+    'region_name': '{{ keystone.region_name }}',
+{% endif %}
     'username': '{{ keystone.admin.username }}',
     'password': '{{ keystone.admin.password }}',
     'tenant_name': '{{ keystone.admin.project_name }}',

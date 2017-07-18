@@ -16,7 +16,7 @@
     state: touch
     mode: 0666
 
-- name: Create logrotate file
-  copy:
-    src: dailyRotateOperation
+- name: Create dailyRotateOperation
+  template:
+    src: dailyRotateOperation.j2
     dest: /etc/logrotate.d/dailyRotateOperation

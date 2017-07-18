@@ -1,6 +1,6 @@
 ---
 - hosts: global_biz_serv
+  become: yes
   roles:
     - rabbitmq
     - aflo
-    - capacity

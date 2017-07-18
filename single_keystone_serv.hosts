@@ -1,2 +1,0 @@
-[single_keystone_serv]
-host_name ansible_ssh_user=root ansible_ssh_host=xx.xx.xx.xx_host ansible_ssh_port=22 mariadb_node_address=xx.xx.xx.xx_host is_master=True

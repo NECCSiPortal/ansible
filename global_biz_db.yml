@@ -1,0 +1,5 @@
+---
+- hosts: global_biz_db
+  become: yes
+  roles:
+    - db_setting

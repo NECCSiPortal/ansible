@@ -1,2 +1,0 @@
-[single_aflo_biz_db]
-host_name ansible_ssh_host=xx.xx.xx.xx_host user=root is_master=True

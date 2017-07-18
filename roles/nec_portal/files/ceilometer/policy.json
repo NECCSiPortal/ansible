@@ -1,9 +1,9 @@
 {
-    "context_is_admin": "role:admin and (role:O__DC3__ServiceProvider or role:O__DC3__ServiceManager or role:O__DC3__ContractManager)",
-    "neccs": "role:T__DC3__ProjectMember",
-    "admin_or_neccs": "rule:context_is_admin or rule:neccs",
-
+    "context_is_admin": "(role:admin and (role:O__DC2__ServiceProvider or role:O__DC2__ServiceManager or role:O__DC2__ContractManager))",
     "segregation": "rule:context_is_admin",
+
+    "neccs": "role:T__DC2__ProjectMember",
+    "admin_or_neccs": "(rule:context_is_admin or rule:neccs)",
 
     "telemetry:get_samples": "rule:admin_or_neccs",
     "telemetry:get_sample": "rule:admin_or_neccs",

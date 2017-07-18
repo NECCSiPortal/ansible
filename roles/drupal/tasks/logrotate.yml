@@ -1,10 +1,10 @@
 ---
-- name: Copy Rotate Conf
-  copy:
-    src: drupal
-    dest: /etc/logrotate.d
+- name: Create drupal
+  template:
+    src: drupal.j2
+    dest: /etc/logrotate.d/drupal
 
-- name: Update Rotate Conf
-  copy:
-    src: httpd
-    dest: /etc/logrotate.d
+- name: Create httpd
+  template:
+    src: httpd.j2
+    dest: /etc/logrotate.d/httpd

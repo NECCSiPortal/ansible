@@ -1,6 +1,6 @@
 ---
 - name: Add sample role
-  command: |
+  command: >
     openstack
       --os-auth-url {{ keystone.internalurl }}
       --os-identity-api-version {{ keystone.api_version }}
@@ -20,7 +20,7 @@
   when: is_master
 
 - name: add role to user with project
-  command: |
+  command: >
     openstack
       --os-auth-url {{ keystone.internalurl }}
       --os-identity-api-version {{ keystone.api_version }}

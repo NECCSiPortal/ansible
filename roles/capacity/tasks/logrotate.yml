@@ -1,5 +1,5 @@
 ---
-- name: Copy Rotate Conf
-  copy:
-    src: dailyRotateCapacity
-    dest: /etc/logrotate.d
+- name: Create dailyRotateCapacity
+  template:
+    src: dailyRotateCapacity.j2
+    dest: /etc/logrotate.d/dailyRotateCapacity

@@ -1,0 +1,104 @@
+---
+ansible_user: xxxx
+
+# horizon memcached servers
+horizon_caches_server:
+  - "{{ hostvars[groups['global_portal'][0]].svint }}"
+  - "{{ hostvars[groups['global_portal'][0]].svint }}"
+  - "{{ hostvars[groups['region_portal'][0]].svint }}"
+  - "{{ hostvars[groups['region_portal'][0]].svint }}"
+fqdn_domain: xx.xx.xx.xx_domain_name
+
+region: global
+
+# firewall
+ip_port:
+  - 443/tcp
+  - 11211/tcp
+
+announcement:
+  url: "https://{{ hostvars[groups['global_cms_serv'][0]].fqdn.drupal }}/drupal/?q=user/login&destination=top"
+  url_logout: "https://{{ hostvars[groups['global_cms_serv'][0]].fqdn.drupal }}/drupal/?q=user/logout"
+
+kibana_url:
+  portal: "https://{{ hostvars[groups['global_portal'][0]].svint }}:5601/"
+  elk: "https://{{ hostvars[groups['global_portal'][0]].svint }}:5601/"
+
+# keystone
+keystone:
+  host: "{{ hostvars[groups['global_keystone_serv'][0]].svmng }}"
+  auth_url: "http://{{ hostvars[groups['global_keystone_serv'][0]].svmng }}:5000/v3"
+  region_name: RegionOne
+  default_role: _member_
+  admin:
+    username: admin
+    password: xxxx_keystone_user_pass
+    project_name: admin
+
+aflo:
+  service_name: global_ticket
+  region_name_list:
+    - DC1
+    - DC2
+    - DC3
+  role_name_list:
+    - ServiceProvider
+    - ServiceManager
+    - ContractManager
+
+links:
+  contract:
+    - name: RegionPortal(DC1)
+      root_url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc1 }}/"
+      description: To access the Region Portal(DC1)
+      role: [T__DC1__ProjectMember,T__DC1__ObjectStore]
+    - name: RegionPortal(DC2)
+      root_url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc2 }}/"
+      description: To access the Region Portal(DC2)
+      role: [T__DC2__ProjectMember,T__DC2__ObjectStore]
+    - name: RegionPortal(DC3)
+      root_url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc3 }}/"
+      description: To access the Region Portal(DC3)
+      role: [T__DC3__ProjectMember,T__DC3__ObjectStore]
+  admin:
+    - name: RegionPortal(DC1)
+      url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc1 }}/"
+      description: To access the Region Portal(DC1)
+      role: O__DC1__ServiceProvider,O__DC1__ServiceManager,O__DC1__ContractManager
+    - name: RegionPortal(DC2)
+      url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc2 }}/"
+      description: To access the Region Portal(DC2)
+      role: O__DC2__ServiceProvider,O__DC2__ServiceManager,O__DC2__ContractManager
+    - name: RegionPortal(DC3)
+      url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc3 }}/"
+      description: To access the Region Portal(DC3)
+      role: O__DC3__ServiceProvider,O__DC3__ServiceManager,O__DC3__ContractManager
+    - name: Announce
+      url: "https://{{ hostvars[groups['global_cms_serv'][0]].fqdn.drupal }}/drupal/?q=user/login&destination=admin"
+      description: Announcement Management
+  project:
+    - name: RegionPortal(DC1)
+      url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc1 }}/"
+      description: To access the Region Portal(DC1)
+      role: T__DC1__ProjectMember,T__DC1__ObjectStore
+    - name: RegionPortal(DC2)
+      url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc2 }}/"
+      description: To access the Region Portal(DC2)
+      role: T__DC2__ProjectMember,T__DC2__ObjectStore
+    - name: RegionPortal(DC3)
+      url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.portal.dc3 }}/"
+      description: To access the Region Portal(DC3)
+      role: T__DC3__ProjectMember,T__DC3__ObjectStore
+
+control_admin_menu_roles:
+  - admin
+  - O__DC1__ServiceManager
+  - O__DC1__ServiceProvider
+  - O__DC1__ContractManager
+
+is_use_aflo: true
+is_use_self_identity: true
+is_use_announcement: true
+is_use_cinder_backup: false
+is_setting_ssl: false
+is_setting_httpd: false

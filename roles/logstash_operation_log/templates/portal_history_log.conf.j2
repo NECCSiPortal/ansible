@@ -7,8 +7,8 @@ input {
 filter {
   if [path] == "/var/log/horizon/operation/operation.log" {
     grok {
-      patterns_dir => "./patterns"
-      match => { "message" => "%{OPERATIONLOGFORMAT}" }
+      patterns_dir => ["./patterns"]
+      match => { "message" => "%{DJANGODATETIME:datetime} %{NUMBER:process_id} %{LOGLEVEL:log_level} %{NOTSPACE:source_file} %{NOTCOMMA:project_name},%{NOTSPACE:project_id} %{NOTCOMMA:user_name},%{NOTSPACE:user_id} %{NOTSPACE:referer_url} %{NOTSPACE:operation_target} %{OPERATION_MESSAGE:operation_message} %{NOTSPACE:operation_type} %{NOTSPACE:http_response_code} %{JSON_DICTIONALY:request_parameter}" }
       add_tag => [ "parse_success" ]
     }
     date {

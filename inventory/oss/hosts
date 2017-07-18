@@ -1,0 +1,33 @@
+[global_biz_db]
+global is_master=True
+
+[global_biz_serv]
+global is_master=True
+
+[global_cms_serv]
+global
+
+[global_keystone_serv]
+global is_master=True
+
+[global_portal]
+global
+
+[region_biz_db]
+region is_master=True
+
+[region_biz_serv]
+region is_master=True
+
+[region_cms_serv]
+region
+
+[region_portal]
+region
+
+[logstash_capacity:children]
+region_biz_serv
+
+[logstash_operation_log:children]
+global_portal
+region_portal

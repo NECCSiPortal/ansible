@@ -38,3 +38,8 @@
   with_items:
     - nec_portal
     - openstack_dashboard
+
+- name: Create _40_announcement.py
+  template:
+    src: _40_announcement.py.j2
+    dest: /usr/share/openstack-dashboard/openstack_dashboard/local/local_settings.d/_40_announcement.py

@@ -1,0 +1,11 @@
+/var/log/horizon/*.log
+{
+    su root root
+    daily
+    rotate {{ logrotate_days }}
+    copytruncate
+    compress
+    delaycompress
+    missingok
+    notifempty
+}

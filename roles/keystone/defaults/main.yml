@@ -19,6 +19,12 @@ keystone:
     role: admin
     domain: default
   api_version: 3
+  token:
+    cron_flush:
+      minute: 0
+      hour: 0
+
+admin_token: xxxx
 
 keystone_db:
   host:

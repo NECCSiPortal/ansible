@@ -1,4 +1,5 @@
 ---
 - hosts: global_cms_serv
+  become: yes
   roles:
     - drupal

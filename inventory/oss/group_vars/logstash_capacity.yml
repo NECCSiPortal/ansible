@@ -1,0 +1,8 @@
+---
+ansible_user: xxxx
+
+# Setting of an outside system.
+# Please search for an IP by the grep command and change it.
+elasticsearch:
+  host: xxxx_elasticsearch_ip
+  port: 9200

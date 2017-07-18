@@ -7,21 +7,21 @@ ar_set_type=1
 
 [account]
 # Configuration information for using the client
-client_user = {{ keystone.admin.user_name }}
-client_password = {{ keystone.admin.password }}
-client_project_id = {{ keystone.admin.tenant_name }}
-# client_auth_url = http://xx.xx.xx.xx:5000/v2.0/
+client_user = {{ keystone.capacity.user_name }}
+client_password = {{ keystone.capacity.password }}
+client_project_id = {{ keystone.capacity.tenant_name }}
 # This is the configuration information when you want to use the Keystone v3.
 client_auth_url = {{ keystone.auth_url }}
 # It will specify the version of the Keystone you want to use.
 # Default of client_auth_version is 2.
 client_auth_version = {{ keystone.api_version }}
 # This configuration information to be used in only when you want to use the Keystone v3.
-client_user_domain_id = {{ keystone.admin.user_domain_id }}
-client_project_domain_id = {{ keystone.admin.project_domain_id }}
+client_user_domain_id = {{ keystone.capacity.user_domain_id }}
+client_project_domain_id = {{ keystone.capacity.project_domain_id }}
 # Nova API version.
 client_nova_version = 2
 client_nova_endpoint_type = internalURL
+client_nova_region_name = {{ keystone.capacity.region_name }}
 
 [disk_allocation_ratio]
 # It can be set for each availability zone.

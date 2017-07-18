@@ -7,6 +7,23 @@
     src: NECCSPortal-dashboard.tar.gz
     dest: /root/
 
+- name: Copy local_settings.d
+  command: |
+    \cp -prf
+      /usr/share/openstack-dashboard/openstack_dashboard/local/local_settings.d
+      /etc/openstack-dashboard/
+
+- name: Delete local_settings.d
+  file:
+    path: /usr/share/openstack-dashboard/openstack_dashboard/local/local_settings.d
+    state: absent
+
+- name: Symbolic Link local_settings.d
+  file:
+    src: /etc/openstack-dashboard/local_settings.d
+    dest: /usr/share/openstack-dashboard/openstack_dashboard/local/local_settings.d
+    state: link
+
 - name: Decompress NECCSPortal-dashboard
   command: tar xvfz NECCSPortal-dashboard.tar.gz
   args:
@@ -54,12 +71,6 @@
       /root/NECCSPortal-dashboard/nec_portal
       /usr/share/openstack-dashboard/
 
-- name: Copy horizon files for NECCS Portal
-  command: |
-    cp -prf
-      /root/NECCSPortal-dashboard/horizon
-      {{ python_directory }}/site-packages/
-
 - name: Copy enabled files for NECCS Portal
   command: |
     cp -prf
@@ -81,26 +92,10 @@
       /root/NECCSPortal-dashboard/openstack_dashboard/themes
       /usr/share/openstack-dashboard/openstack_dashboard/
 
-- name: Backup files of openstack-dashboard
-  command: >-
-    cp -p
-      /usr/share/openstack-dashboard/openstack_dashboard/{{ item }}
-      /usr/share/openstack-dashboard/openstack_dashboard/{{ item }}.org
-  args:
-    creates: "/usr/share/openstack-dashboard/openstack_dashboard/{{ item }}.org"
-    removes: "/usr/share/openstack-dashboard/openstack_dashboard/{{ item }}"
-  with_items:
-    - local/local_settings.py
-
 - name: Create _30_nec_portal.py
   template:
     src: _30_nec_portal.py.j2
     dest: /usr/share/openstack-dashboard/openstack_dashboard/local/local_settings.d/_30_nec_portal.py
-
-- name: Create local_settings.py
-  template:
-    src: local_settings.py.j2
-    dest: /usr/share/openstack-dashboard/openstack_dashboard/local/local_settings.py
 
 - name: Create nec_portal_settings.py
   template:
@@ -110,6 +105,8 @@
 - include: portal_menu.yml
 
 - include: portal_policy.yml
+
+- include: memcached.yml
 
 # Task: Compile openstack-dashboard
 ##############################################################################
@@ -146,9 +143,9 @@
     recurse: yes
     mode: u=rwx,g=rx,o=rx
 
-- name: Create logrotate file
-  copy:
-    src: openstack-dashboard
+- name: Create openstack-dashboard
+  template:
+    src: openstack-dashboard.j2
     dest: /etc/logrotate.d/openstack-dashboard
 
 # Task: Restart some services
@@ -158,5 +155,5 @@
     name: "{{ item }}"
     state: restarted
   with_items:
-    - httpd
     - memcached
+    - httpd

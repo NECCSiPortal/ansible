@@ -11,8 +11,8 @@ echo "-------------------------------------------------" >> ${RESULT}
 
 # 1. Check Service
 echo "1. Check Service" >> ${RESULT}
-echo "$ systemctl status openstack-keystone" >> ${RESULT}
-systemctl status openstack-keystone 1>> ${RESULT} 2>&1
+echo "$ systemctl status httpd" >> ${RESULT}
+systemctl status httpd 1>> ${RESULT} 2>&1
 echo "" >> ${RESULT}
 
 # 2. Check installed package

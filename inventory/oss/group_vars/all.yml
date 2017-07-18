@@ -1,0 +1,26 @@
+---
+ansible_user: xxxx
+
+portal_repository:
+  name: xxxxx
+  address: xx.xx.xx.xx
+
+ntp_servers:
+  - xx.xx.xx.xx_ntp
+  - xx.xx.xx.xx_ntp
+
+# Leap second countermeasure
+# The unit is seconds
+gradually_synchronize_time: 1000
+
+proxy: http://xx.xx.xx.xx:8080
+
+logrotate_days: 31
+
+is_create_user: True
+is_add_sudo: True
+is_add_ssh_key: True
+
+target_username: root
+target_ssh_key: xxxxxxxx 
+password: xxxx

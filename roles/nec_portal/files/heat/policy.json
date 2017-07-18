@@ -1,12 +1,12 @@
 {
-    "context_is_admin": "role:admin and (role:O__DC3__ServiceProvider or role:O__DC3__ServiceManager or role:O__DC3__ContractManager)",
-
-    "neccs": "role:T__DC3__ProjectMember",
-    "admin_or_neccs": "rule:context_is_admin or rule:neccs",
-    "neccs_deny_stack_user": "rule:context_is_admin or (rule:neccs and rule:deny_stack_user)",
-
+    "context_is_admin": "(role:admin and (role:O__DC2__ServiceProvider or role:O__DC2__ServiceManager or role:O__DC2__ContractManager) and is_admin_project:True)",
+    "project_admin": "(role:admin and (role:O__DC2__ServiceProvider or role:O__DC2__ServiceManager or role:O__DC2__ContractManager))",
     "deny_stack_user": "not role:heat_stack_user",
     "deny_everybody": "!",
+
+    "neccs": "role:T__DC2__ProjectMember",
+    "admin_or_neccs": "(rule:context_is_admin or rule:neccs)",
+    "neccs_deny_stack_user": "(rule:context_is_admin or (rule:neccs and rule:deny_stack_user))",
 
     "cloudformation:ListStacks": "rule:neccs_deny_stack_user",
     "cloudformation:CreateStack": "rule:neccs_deny_stack_user",
@@ -59,6 +59,8 @@
     "stacks:resource_schema": "rule:neccs_deny_stack_user",
     "stacks:show": "rule:neccs_deny_stack_user",
     "stacks:template": "rule:neccs_deny_stack_user",
+    "stacks:environment": "rule:neccs_deny_stack_user",
+    "stacks:files": "rule:neccs_deny_stack_user",
     "stacks:update": "rule:neccs_deny_stack_user",
     "stacks:update_patch": "rule:neccs_deny_stack_user",
     "stacks:preview_update": "rule:neccs_deny_stack_user",
@@ -86,5 +88,13 @@
 
     "service:index": "rule:context_is_admin",
 
-    "resource_types:OS::Nova::Flavor": "rule:context_is_admin"
+    "resource_types:OS::Nova::Flavor": "rule:project_admin",
+    "resource_types:OS::Cinder::EncryptedVolumeType": "rule:project_admin",
+    "resource_types:OS::Cinder::VolumeType": "rule:project_admin",
+    "resource_types:OS::Cinder::Quota": "rule:project_admin",
+    "resource_types:OS::Manila::ShareType": "rule:project_admin",
+    "resource_types:OS::Neutron::QoSPolicy": "rule:project_admin",
+    "resource_types:OS::Neutron::QoSBandwidthLimitRule": "rule:project_admin",
+    "resource_types:OS::Nova::HostAggregate": "rule:project_admin",
+    "resource_types:OS::Cinder::QoSSpecs": "rule:project_admin"
 }

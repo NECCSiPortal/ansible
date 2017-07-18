@@ -1,0 +1,131 @@
+---
+ansible_user: xxxx
+
+is_redundancy: True
+
+mariadb_datadir: /mnt/nas01/data/mysql
+mariadb_user: mysql
+
+# port
+firewall:
+  ip_port:
+    - 3306/tcp
+  service:
+    - mysql
+    - high-availability
+
+mysql:
+  host:
+    access_host: localhost
+    login_user: root
+    login_password: xxxx
+  db:
+    - create_user_name: root
+      name: '*'
+      host: '%'
+      password: xxxx_mysql_root_user_pass
+    - create_user_name: test
+      name: '*'
+      host: '%'
+      password: xxxx
+
+aflo_db:
+  host:
+    host: "{{ hostvars[groups['region_portal'][0]].svmng }}"
+    login_user: root
+    login_password: xxxx
+  db:
+    name: aflo
+    user: aflo
+    password: xxxx
+
+db_setting:
+  - host:
+      login_user: root
+      login_password: 'xxxx'
+    db:
+      name: aflo
+      user: aflo
+      password: xxxx
+    userhost:
+      - 127.0.0.1
+      - '%'
+      - localhost
+  - host:
+      login_user: root
+      login_password: 'xxxx'
+    db:
+      name: drupal
+      user: drupal
+      password: xxxx
+    userhost:
+      - '%'
+
+pcs_config:
+  resource_dir: /usr/lib/ocf/resource.d/myres
+  user:
+    name: hacluster
+    password: xxxx
+  cluster_name: hacluster
+  master_node: "{{ hostvars[groups['region_biz_db'][0]].heatbeat }}"
+  standby_node: "{{ hostvars[groups['region_biz_db'][1]].heatbeat }}"
+  mysql_check:
+    user: chker
+    pass: xxxx
+    database: chk_db
+    table: chk_tb1
+  resources:
+    mysql:
+      - key: res_mysql
+        binary: /usr/bin/mysqld_safe
+        datadir: /var/lib/mysql
+        config: /etc/my.cnf
+        user: mysql
+        group: mysql
+        log: /var/log/mariadb/mariadb.log
+    heartbeat:
+      - key: res_vip_svint1
+        addr: "{{ hostvars[groups['region_biz_db'][0]].vip.region_biz_db.svint }}"
+        netmask: 24
+        nic: eth1
+    ping:
+      - key: res_ping_svint
+        name: default_ping_svint
+        host_list: "{{ hostvars[groups['region_biz_db'][0]].ping.svint }}"
+      - key: res_ping_nas
+        name: default_ping_nas
+        host_list: "{{ hostvars[groups['region_biz_db'][0]].ping.nas }}"
+    vipcheck:
+      - key: res_vipcheck_svint1
+        addr: "{{ hostvars[groups['region_biz_db'][0]].vip.region_biz_db.svint }}"
+  clone:
+    - res_ping_svint
+    - res_ping_nas
+  constraints:
+    location:
+      - key: res_vip_svint1
+        score: -INFINITY
+        flag: default_ping_svint
+      - key: res_vip_svint1
+        score: -INFINITY
+        flag: default_ping_nas
+    order:
+      - key1: res_db
+        key2: res_vipcheck_svint1
+      - key1: res_vipcheck_svint1
+        key2: res_vip_svint1
+      - key1: res_vipcheck_svint1
+        key2: res_mysql
+      - key1: res_mysql
+        key2: res_vip_svint1
+      - key1: clone-res_ping_nas
+        key2: res_db
+  colocations:
+    - key1: res_mysql
+      key2: res_vipcheck_svint1
+    - key1: res_vip_svint1
+      key2: res_mysql
+    - key1: res_vipcheck_svint1
+      key2: res_vip_svint1
+    - key1: res_db
+      key2: res_mysql

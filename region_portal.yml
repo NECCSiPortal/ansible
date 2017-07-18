@@ -1,0 +1,7 @@
+---
+- hosts: region_portal
+  become: yes
+  roles:
+    - openstack-dashboard
+    - python-Afloclient
+    - nec_portal

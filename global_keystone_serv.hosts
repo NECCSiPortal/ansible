@@ -1,3 +1,0 @@
-[global_keystone_serv]
-xxxx ansible_ssh_user=root ansible_ssh_host=xx.xx.xx.xx_keystone_svmng_1 ansible_ssh_port=22 mariadb_node_address=xx.xx.xx.xx_keystone_ip_1_svint is_master=True
-xxxx ansible_ssh_user=root ansible_ssh_host=xx.xx.xx.xx_keystone_svmng_2 ansible_ssh_port=22 mariadb_node_address=xx.xx.xx.xx_keystone_ip_2_svint

@@ -1,0 +1,24 @@
+{
+    "context_is_admin": "(role:admin and (role:O__DC2__ServiceProvider or role:O__DC2__ServiceManager or role:O__DC2__ContractManager))",
+    "segregation": "rule:context_is_admin",
+    "admin_or_owner": "(rule:context_is_admin or project_id:%(project_id)s)",
+    "default": "rule:admin_or_neccs_owner",
+
+    "neccs": "role:T__DC2__ProjectMember",
+    "admin_or_neccs": "(rule:context_is_admin or rule:neccs)",
+    "admin_or_neccs_owner": "(rule:context_is_admin or (rule:neccs and project_id:%(project_id)s))",
+
+    "telemetry:get_alarm": "rule:admin_or_neccs_owner",
+    "telemetry:get_alarms": "rule:admin_or_neccs_owner",
+    "telemetry:query_alarm": "rule:admin_or_neccs_owner",
+
+    "telemetry:create_alarm": "rule:admin_or_neccs",
+    "telemetry:change_alarm": "rule:admin_or_neccs_owner",
+    "telemetry:delete_alarm": "rule:admin_or_neccs_owner",
+
+    "telemetry:get_alarm_state": "rule:admin_or_neccs_owner",
+    "telemetry:change_alarm_state": "rule:admin_or_neccs_owner",
+
+    "telemetry:alarm_history": "rule:admin_or_neccs_owner",
+    "telemetry:query_alarm_history": "rule:admin_or_neccs_owner"
+}

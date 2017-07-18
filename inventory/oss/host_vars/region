@@ -1,0 +1,31 @@
+---
+# IP Address
+svmng:xx.xx.xx.xx_region_ip
+svint:xx.xx.xx.xx_region_ip
+heatbeat:xx.xx.xx.xx_region_ip
+
+vip:
+  region_biz_db:
+    svint:xx.xx.xx.xx_region_ip
+
+ping:
+  svint:xx.xx.xx.xx_region_ip
+  nas:xx.xx.xx.xx_region_ip
+
+fqdn:
+  drupal: xx.xx.xx.xx
+  portal:
+    dc1: xx.xx.xx.xx
+    dc2: xx.xx.xx.xx
+    dc3: xx.xx.xx.xx
+
+# For Ansible
+ansible_host: "{{ svmng }}"
+
+use_gui_setting: True
+
+region: region
+
+nova_rabbitmq_hosts:
+  svmng:
+    -xx.xx.xx.xx_region_ip

@@ -1,0 +1,21 @@
+---
+- name: Create database
+  mysql_db:
+    login_user: "{{ db_name.host.login_user }}"
+    login_password: "{{ db_name.host.login_password }}"
+    name: "{{ db_name.db.name }}"
+    state: present
+  when: is_master
+
+- name: Add DB user and allow access to database
+  mysql_user:
+    login_user: "{{ db_name.host.login_user }}"
+    login_password: "{{ db_name.host.login_password }}"
+    name: "{{ db_name.db.user }}"
+    password: "{{ db_name.db.password }}"
+    host: "{{ item }}"
+    priv: "{{ db_name.db.name }}.*:ALL,GRANT"
+    state: present
+  with_items:
+    - "{{ db_name.userhost }}"
+  when: is_master

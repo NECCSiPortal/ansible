@@ -1,0 +1,5 @@
+---
+- hosts: region_cms_serv
+  become: yes
+  roles:
+    - drupal

@@ -1,5 +1,5 @@
 ---
-- name: Create logrotate file
-  copy:
-    src: dailyRotateAflo
+- name: Create dailyRotateAflo
+  template:
+    src: dailyRotateAflo.j2
     dest: /etc/logrotate.d/dailyRotateAflo

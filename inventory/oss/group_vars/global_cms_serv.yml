@@ -1,0 +1,21 @@
+---
+ansible_user: xxxx
+
+# firewall
+ip_port:
+  - 443/tcp
+
+# ssl
+setting_ssl: False
+ssl_crt_dir: /etc/httpd/conf/ssl.crt
+ssl_key_dir: /etc/httpd/conf/ssl.key
+ssl_crt_file: server.crt
+ssl_key_file: server.key
+
+# drupal
+drupal: drupal-7.44.tar.gz
+
+drupal_db:
+  server_ip: "{{ hostvars[groups['global_biz_db'][0]].svint }}"
+  username: drupal
+  password: xxxx_drupa_user_pass

@@ -1,0 +1,15 @@
+---
+is_master: False
+
+db_setting:
+  - host:
+      login_user: root
+      login_password: xxxx
+    db:
+      name: db_name
+      user: root
+      password: xxxx
+    userhost:
+      - 127.0.0.1
+      - '%'
+      - localhost

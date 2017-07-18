@@ -1,4 +1,5 @@
 ---
 - hosts: logstash_operation_log
+  become: yes
   roles:
     - logstash_operation_log

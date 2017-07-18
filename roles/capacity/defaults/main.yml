@@ -4,9 +4,10 @@ ap_path: /usr/share
 keystone:
   auth_url: http://192.168.0.1:5000/v3
   api_version: 3
-  admin:
+  capacity:
     user_name: admin
     password: xxxx
+    region_name: RegionOne
     tenant_name: admin
     user_domain_id: default
     project_domain_id: default

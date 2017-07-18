@@ -1,10 +1,10 @@
 ---
-- name: Copy openstack-dashboard
-  copy:
-    src: openstack-dashboard
-    dest: /etc/logrotate.d/
+- name: Create openstack-dashboard
+  template:
+    src: openstack-dashboard.j2
+    dest: /etc/logrotate.d/openstack-dashboard
 
-- name: Copy httpd
-  copy:
-    src: httpd
-    dest: /etc/logrotate.d/
+- name: Create httpd
+  template:
+    src: httpd.j2
+    dest: /etc/logrotate.d/httpd

@@ -1,8 +1,6 @@
 ---
 - include: install.yml
 
-- include: firewall.yml
-
 - include: setting.yml
 
 - include: logrotate.yml

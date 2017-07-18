@@ -1,4 +1,21 @@
 ---
+- name: Backup policy
+  command: >
+    cp -p
+      /etc/openstack-dashboard/{{ item }}_policy.json
+      /etc/openstack-dashboard/{{ item }}_policy.json.org
+  args:
+    creates: "/etc/openstack-dashboard/{{ item }}_policy.json.org"
+    removes: "/etc/openstack-dashboard/{{ item }}_policy.json"
+  with_items:
+    - keystone
+    - nova
+    - glance
+    - cinder
+    - neutron
+    - heat
+    - ceilometer
+
 - name: Create policy.json for global portal
   copy:
     src: "{{ item }}_policy.json"

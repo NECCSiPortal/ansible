@@ -1,6 +1,6 @@
 ---
 - name: Create keystone initial admin data
-  command: |
+  command: >
     keystone-manage bootstrap
       --bootstrap-password {{ keystone.admin.password }}
       --bootstrap-username {{ keystone.admin.user_name }}
@@ -14,7 +14,7 @@
   when: is_master
 
 - name: Add service project
-  command: |
+  command: >
     openstack
       --os-auth-url {{ keystone.internalurl }}
       --os-identity-api-version {{ keystone.api_version }}
@@ -28,23 +28,8 @@
     - service
   when: is_master
 
-- name: Add role
-  command: |
-    openstack
-      --os-auth-url {{ keystone.internalurl }}
-      --os-identity-api-version {{ keystone.api_version }}
-      --os-interface internal
-      --os-username {{ keystone.admin.user_name }}
-      --os-password {{ keystone.admin.password }}
-      --os-project-name {{ keystone.admin.project }}
-      --os-domain-name {{ keystone.admin.domain_id }}
-      role create {{ item }}
-  with_items:
-    - _member_
-  when: is_master
-
 - name: add role to user with project
-  command: |
+  command: >
     openstack
       --os-auth-url {{ keystone.internalurl }}
       --os-identity-api-version {{ keystone.api_version }}

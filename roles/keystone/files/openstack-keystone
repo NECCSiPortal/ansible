@@ -1,7 +1,0 @@
-/var/log/keystone/*.log {
-    daily
-    rotate 31
-    missingok
-    compress
-    minsize 100k
-}

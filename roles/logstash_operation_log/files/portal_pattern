@@ -1,6 +1,8 @@
 NOTCOMMA [^,]+
 NOTTAB [^\t]+
 DJANGODATETIME %{YEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:?%{MINUTE}(?::?%{SECOND}),%{NUMBER}
+OPERATION_MESSAGE (.*)((?=\sPOST)|(?=\sGET))
+JSON_DICTIONALY \{.*\}
 JSON \[.*\]
 OPERATIONLOGFORMAT %{DJANGODATETIME:datetime} %{NUMBER:process_id} %{LOGLEVEL:log_level} %{NOTSPACE:source_file} %{NOTCOMMA:project_name},%{NOTSPACE:project_id} %{NOTCOMMA:user_name},%{NOTSPACE:user_id} %{NOTSPACE:referer_url} %{NOTSPACE:operation_target} %{JSON:operation_message} %{NOTSPACE:operation_type} %{NOTSPACE:http_response_code} %{JSON:request_parameter}
 CAPACITYDATETIME %{YEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:?%{MINUTE}(?::?%{SECOND})

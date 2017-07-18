@@ -1,0 +1,96 @@
+---
+ansible_user: xxxx
+
+# horizon memcached servers
+horizon_caches_server:
+  - "{{ hostvars[groups['global_portal'][0]].svint }}"
+  - "{{ hostvars[groups['global_portal'][0]].svint }}"
+  - "{{ hostvars[groups['region_portal'][0]].svint }}"
+  - "{{ hostvars[groups['region_portal'][0]].svint }}"
+fqdn_domain: xxx.xxx.xxx
+
+region: region
+
+# IaaS policy
+policy:
+  region_name: DC1
+
+# firewall
+ip_port:
+  - 443/tcp
+  - 11211/tcp
+  - 6080/tcp
+
+nova_rabbitmq:
+  host: "{{ hostvars[groups['region_portal'][0]].nova_rabbitmq_hosts.svmng }}"
+  user: admin
+  password: xxxx_keystone_user_pass
+
+announcement:
+  url: "https://{{ hostvars[groups['region_cms_serv'][0]].fqdn.drupal }}/drupal/?q=user/login&destination=top"
+  url_logout: "https://{{ hostvars[groups['region_cms_serv'][0]].fqdn.drupal }}/drupal/?q=user/logout"
+
+kibana_url:
+  portal: "https://{{ hostvars[groups['global_portal'][0]].svint }}:5601/"
+  elk: "https://{{ hostvars[groups['global_portal'][0]].svint }}:5601/"
+
+aflo:
+  service_name: region_ticket
+  region_name_list:
+    - "{{ policy.region_name }}"
+  role_name_list:
+    - ServiceProvider
+    - ServiceManager
+    - ContractManager
+
+# keystone
+keystone:
+  host: "{{ hostvars[groups['global_keystone_serv'][0]].svmng }}"
+  auth_url: "http://{{ hostvars[groups['global_keystone_serv'][0]].svmng }}:5000/v3"
+  region_name: RegionOne
+  default_role: _member_
+  admin:
+    username: admin
+    password: xxxx
+    project_name: admin
+
+links:
+  admin:
+    - name: Global Portal
+      url: "https://{{ hostvars[groups['global_portal'][0]].fqdn.portal }}/"
+      description: To access the Global Portal.
+    - name: monitor
+      url: "https://{{ hostvars[groups['region_portal'][0]].fqdn.zabbix }}/zabbix/"
+      description: Do monitered management.
+      role: O__DC1__ServiceProvider
+    - name: repository
+      url: "https://{{ hostvars[groups['global_portal'][0]].svint }}/"
+      description: Do centralized management of resource files.
+      role: O__DC1__ServiceManager
+    - name: Announce
+      url: "https://{{ hostvars[groups['region_cms_serv'][0]].fqdn.drupal }}/drupal/?q=user/login&destination=admin"
+      description: Announcement Management
+  project:
+    - name: Global Portal
+      url: "https://{{ hostvars[groups['global_portal'][0]].fqdn.portal }}/"
+      description: To access the Global Portal.
+    - name: repository
+      description: Do centralized management of resource files.
+      url: "https://{{ hostvars[groups['global_portal'][0]].svint }}/"
+      role: C__Global__ProjectAdmin,T__DC1__ProjectMember
+
+control_admin_menu_roles:
+  - admin
+  - O__DC1__ServiceManager
+  - O__DC1__ServiceProvider
+  - O__DC1__ContractManager
+
+is_use_aflo: true
+is_use_self_identity: false
+is_use_announcement: true
+is_use_cinder_backup: false
+is_setting_ssl: false
+is_setting_httpd: false
+
+# Set a keystone role name for object storage
+object_storage_admin_role: T__DC1__ObjectStore

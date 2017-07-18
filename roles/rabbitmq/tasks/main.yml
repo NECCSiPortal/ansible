@@ -1,7 +1,4 @@
 ---
-# Configure the firewall
-- include: firewall.yml
-
 # Install some Packages
 - include: install.yml
 

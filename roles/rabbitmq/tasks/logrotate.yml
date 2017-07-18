@@ -1,10 +1,10 @@
 ---
-- name: Remove logrotate operation
+- name: Remove rabbitmq-server
   file:
     path: /etc/logrotate.d/rabbitmq-server
-    state: absent 
+    state: absent
 
-- name: Create logrotate operation
-  copy:
-    src: dailyRotateRabbitmq
+- name: Create dailyRotateRabbitmq
+  template:
+    src: dailyRotateRabbitmq.j2
     dest: /etc/logrotate.d/dailyRotateRabbitmq

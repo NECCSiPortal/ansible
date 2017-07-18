@@ -1,29 +1,42 @@
 ---
+- name: Create config directory
+  file:
+    path: /etc/logstash/conf.d
+    owner: root
+    group: root
+    state: directory
+    recurse: yes
+    mode: u=rwx,g=rx,o=rx
+
+- name: Create portal_history_log.conf
+  template:
+    src: portal_history_log.conf.j2
+    dest: /etc/logstash/conf.d/portal_history_log.conf
+
 - name: Create patterns directory
   file:
-    path: /opt/logstash/patterns/
+    path: /opt/logstash/patterns
     owner: logstash
     group: logstash
     state: directory
     recurse: yes
     mode: u=rwx,g=rx,o=rx
 
-- name: Copy grok-patterns file
+- name: Copy grok-patterns
   copy:
     src: grok-patterns
-    dest: /opt/logstash/patterns/grok-patterns
+    owner: logstash
+    group: logstash
+    dest: /opt/logstash/patterns/
 
-- name: Copy portal_pattern file
+- name: Copy portal_pattern
   copy:
     src: portal_pattern
-    dest: /opt/logstash/patterns/portal_pattern
+    owner: logstash
+    group: logstash
+    dest: /opt/logstash/patterns/
 
-- name: Copy portal_history_log.conf file
-  template:
-    src: portal_history_log.conf.j2
-    dest: /etc/logstash/conf.d/portal_history_log.conf
-
-- name: Create log directory for logstash
+- name: Create log directory
   file:
     path: /var/log/logstash
     owner: logstash
@@ -31,7 +44,7 @@
     state: directory
     mode: u=rwx,g=rx,o=rx
 
-- name: Create logstash_parse.err file
+- name: Create logstash_parse.err
   file:
     path: /var/log/logstash/logstash_parse.err
     owner: logstash

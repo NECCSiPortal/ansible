@@ -12,5 +12,7 @@
       state: present
     - name: python-openstackclient
       state: present
-    - name: MariaDB-client
+    - name: httpd
+      state: present
+    - name: mod_wsgi
       state: present

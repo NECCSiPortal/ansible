@@ -1,0 +1,8 @@
+/var/log/keystone/*.log {
+    daily
+    rotate {{ logrotate_days }}
+    missingok
+    compress
+    delaycompress
+    minsize 100k
+}

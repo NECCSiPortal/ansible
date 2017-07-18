@@ -354,7 +354,7 @@ ssl_verify = False
 
 [quotas]
 # Describe the key and the upper limit of the quota
-# at the time of pay-per-use contract.
+# at the time of pay-for-use contract.
 # Add the element here is if you want to add a quota item.
 # Also performs modification of config.py.
 pay_for_use_contract_quota_value = cores:99999,ram:99999999,gigabytes:99999
@@ -364,3 +364,15 @@ pay_for_use_contract_quota_value = cores:99999,ram:99999999,gigabytes:99999
 # example-single: T__DC1__ObjectStore,
 # example-multi:  T__DC1__ObjectStore,Other_Role,
 ost_roles = {{ ost_contract.ost_roles }}
+
+# Specify users who should not be stripped roles
+# to operate Object Storage Service
+# when a contract is canceled.
+# Basically, it's assumed operators like
+# system administrator, or service users
+# like nova, cinder.
+{% set disinherited_user_list = [] %}
+{% for disinherited_user in aflo.disinherited_users %}
+{%   set _ = disinherited_user_list.append(disinherited_user) %}
+{% endfor %}
+disinherited_user = {{ disinherited_user_list | join(',') }}

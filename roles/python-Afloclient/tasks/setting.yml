@@ -20,5 +20,15 @@
   command: pip install -r /usr/share/python-Afloclient/requirements.txt
   when: proxy is not defined
 
+- name: Get version of pbr
+  shell: pip list --format=columns | grep pbr | awk '{ print $2 }'
+  register: pbr_version
+
 - name: python-Afloclient python setup
-  command: chdir=/usr/share/python-Afloclient/ python setup.py install
+  command: python setup.py install
+  args:
+    chdir: /usr/share/python-Afloclient
+  environment:
+    PBR_VERSION: "{{ pbr_version.stdout }}"
+  args:
+    chdir: /usr/share/python-Afloclient/

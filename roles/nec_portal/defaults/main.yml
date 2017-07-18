@@ -1,13 +1,17 @@
 ---
-# Disable unnecessary horizon default menu for global_portal
-is_disabled_menu:  True
-# Remove unnecessary neccs menu for global_portal
+# Remove unnecessary horizon & neccs menu
 is_remove_menu: True
 
 is_setting_ssl: True
 is_setting_httpd: True
+is_fix_region: True
 
-# region type: "region" or "global"
+# horizon memcached servers
+horizon_caches_server:
+  - 127.0.0.1
+  - 127.0.0.2
+fqdn_domain: example.com
+
 region: region
 
 # IaaS policy
@@ -73,6 +77,7 @@ aflo:
 keystone:
   host: 192.168.0.1
   auth_url: http://192.168.0.1:5000/v3
+  region_name: RegionDCX
   default_role: _member_
   admin:
     username: admin
@@ -80,38 +85,45 @@ keystone:
     project_name: admin
 
 announcement:
-  url: https://xx.xx/drupal/?q=user/login&destination=top
+  url: https://drupalxx.xx/drupal/?q=user/login&destination=top
+  url_logout: https://drupalxx.xx/drupal/?q=user/logout
 
 kibana_url:
-  portal: https://portalkibana.xx.xx/
-  elk: https://kibana.xx.xx/
+  portal: https://portalkibanaxx.xx/
+  elk: https://kibanaxx.xx/
 
 links:
   admin:
     - name: Global Portal
-      url: https://globalportal.xx.xx/
+      url: https://globalportalxx.xx/
       description: To access the Global Portal.
     - name: monitor
-      url: http://zabbixweb.xx.xx/zabbix/
+      url: http://zabbixwebxx.xx/zabbix/
       description: Do monitered management.
       role: O__DCX__ServiceProvider
     - name: repository
-      url: https://gitlab.xx.xx/
+      url: https://gitlabxx.xx/
       description: Do centralized management of resource files.
       role: O__DCX__ServiceManager
     - name: Announce
-      url: https://drupal.xx.xx/drupal/?q=user/login
+      url: https://drupalxx.xx/drupal/?q=user/login
       description: Announcement Management
   project:
     - name: Global Portal
-      url: https://globalportal.xx.xx/
+      url: https://globalportalxx.xx/
       description: To access the Global Portal.
     - name: repository
       description: Do centralized management of resource files.
-      url: https://gitlab.xx.xx/
+      url: https://gitlabxx.xx/
       role: C__Global__ProjectAdmin,T__DCX__ProjectMember
+
+control_admin_menu_roles:
+  - admin
 
 is_use_aflo: true
 is_use_self_identity: true
 is_use_announcement: true
 is_use_cinder_backup: false
+
+# Set a keystone role name for object storage
+object_storage_admin_role: T__DCX__ObjectStore

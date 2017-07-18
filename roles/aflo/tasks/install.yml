@@ -8,11 +8,7 @@
       state: present
     - name: python-devel
       state: present
-    - name: python-pip-7.1.0-1.el7
-      state: present
     - name: MySQL-python
-      state: present
-    - name: git
       state: present
     - name: python-pbr
       state: latest
@@ -28,9 +24,21 @@
       state: latest
     - name: python-openstackclient
       state: present
-    - name: MariaDB-client
+    - name: mariadb
       state: present
-  ignore_errors: yes
+
+- name: Copy pip install script
+  copy:
+    src: get-pip.py
+    dest: /tmp/
+
+- name: Install pip(Use proxy)
+  command: 'python /tmp/get-pip.py --proxy={{ proxy }}'
+  when: proxy is defined
+
+- name: Install pip(No use proxy)
+  command: python /tmp/get-pip.py
+  when: proxy is not defined
 
 - name: Upgrade pip(Use proxy)
   command: 'pip install --upgrade pip --proxy={{ proxy }}'
@@ -38,12 +46,4 @@
 
 - name: Upgrade pip(No use proxy)
   command: pip install --upgrade pip
-  when: proxy is not defined
-
-- name: Install setuptools(Use proxy)
-  command: 'pip install {{ setuptools.name }}{{ setuptools.inequality }}{{ setuptools.version }} --proxy={{ proxy }}'
-  when: proxy is defined
-
-- name: Install setuptools(No use proxy)
-  command: 'pip install {{ setuptools.name }}{{ setuptools.inequality }}{{ setuptools.version }}'
   when: proxy is not defined

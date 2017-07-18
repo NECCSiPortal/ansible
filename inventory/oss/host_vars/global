@@ -1,0 +1,19 @@
+---
+# IP Address
+svmng: xx.xx.xx.xx_global_ip
+svint: xx.xx.xx.xx_global_ip
+dmz: xx.xx.xx.xx_global_ip
+dcmng: xx.xx.xx.xx_global_ip
+
+fqdn:
+  drupal: xx.xx.xx.xx
+  portal: xx.xx.xx.xx_global_ip
+
+# For Ansible
+ansible_host: "{{ svmng }}"
+
+use_gui_setting: True
+
+mariadb_node_address: "{{ svint }}"
+
+region: global

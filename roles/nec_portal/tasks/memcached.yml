@@ -1,0 +1,16 @@
+---
+- name: Backup memcached setting
+  command: >
+    cp -p
+      /etc/sysconfig/memcached
+      /etc/sysconfig/memcached.org
+  args:
+    creates: /etc/sysconfig/memcached.org
+    removes: /etc/sysconfig/memcached
+
+- name: Create memcached
+  lineinfile:
+    dest: "/etc/sysconfig/memcached"
+    state: present
+    regexp: "OPTIONS.*"
+    line: 'OPTIONS=""'

@@ -45,13 +45,7 @@
     creates: "{{ ap_path }}/Capacity/capacityclient/etc/{{ item }}.org"
     removes: "{{ ap_path }}/Capacity/capacityclient/etc/{{ item }}"
   with_items:
-    - monitor.conf
     - apacityclient-config.conf
-
-- name: Copy monitor.conf
-  copy:
-    src: monitor.conf
-    dest: "{{ ap_path }}/Capacity/capacityclient/etc/monitor.conf"
 
 - name: Create capacityclient-config.conf
   template:

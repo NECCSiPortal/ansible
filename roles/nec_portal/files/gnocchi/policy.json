@@ -1,0 +1,50 @@
+{
+    "context_is_admin": "(role:admin and (role:O__DC2__ServiceProvider or role:O__DC2__ServiceManager or role:O__DC2__ContractManager))",
+
+    "admin_or_creator": "(rule:context_is_admin or project_id:%(created_by_project_id)s)",
+    "resource_owner": "project_id:%(project_id)s",
+    "metric_owner": "project_id:%(resource.project_id)s",
+
+    "neccs": "role:T__DC2__ProjectMember",
+    "admin_or_neccs": "(rule:context_is_admin or rule:neccs)",
+    "admin_or_neccs_creator": "(rule:context_is_admin or (rule:neccs and project_id:%(created_by_project_id)s))",
+    "resource_neccs_owner": "(rule:neccs and project_id:%(project_id)s)",
+    "metric_neccs_owner": "(rule:neccs and project_id:%(resource.project_id)s)",
+
+    "get status": "rule:context_is_admin",
+
+    "create resource": "rule:admin_or_neccs",
+    "get resource": "rule:admin_or_neccs_creator or rule:resource_neccs_owner",
+    "update resource": "rule:admin_or_neccs_creator",
+    "delete resource": "rule:admin_or_neccs_creator",
+    "delete resources": "rule:admin_or_neccs_creator",
+    "list resource": "rule:admin_or_neccs_creator or rule:resource_neccs_owner",
+    "search resource": "rule:admin_or_neccs_creator or rule:resource_neccs_owner",
+
+    "create resource type": "rule:context_is_admin",
+    "delete resource type": "rule:context_is_admin",
+    "update resource type": "rule:context_is_admin",
+    "list resource type": "rule:admin_or_neccs",
+    "get resource type": "rule:admin_or_neccs",
+
+    "get archive policy": "rule:admin_or_neccs",
+    "list archive policy": "rule:admin_or_neccs",
+    "create archive policy": "rule:context_is_admin",
+    "update archive policy": "rule:context_is_admin",
+    "delete archive policy": "rule:context_is_admin",
+
+    "create archive policy rule": "rule:context_is_admin",
+    "get archive policy rule": "rule:admin_or_neccs",
+    "list archive policy rule": "rule:admin_or_neccs",
+    "delete archive policy rule": "rule:context_is_admin",
+
+    "create metric": "rule:admin_or_neccs",
+    "delete metric": "rule:admin_or_neccs_creator",
+    "get metric": "rule:admin_or_neccs_creator or rule:metric_neccs_owner",
+    "search metric": "rule:admin_or_neccs_creator or rule:metric_neccs_owner",
+    "list metric": "rule:admin_or_neccs",
+    "list all metric": "rule:context_is_admin",
+
+    "get measures": "rule:admin_or_neccs_creator or rule:metric_neccs_owner",
+    "post measures": "rule:admin_or_neccs_creator"
+}

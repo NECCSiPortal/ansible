@@ -5,9 +5,6 @@
 - include: logrotate.yml
   when: not is_create_allinone
 
-- include: firewall.yml
-  when: not is_create_allinone
-
 - include: setting.yml
   when: not is_create_allinone
 

@@ -1,5 +1,10 @@
 ---
-- name: Copy openstack-keystone
-  copy:
-    src: openstack-keystone
-    dest: /etc/logrotate.d/
+- name: Create openstack-keystone
+  template:
+    src: openstack-keystone.j2
+    dest: /etc/logrotate.d/openstack-keystone
+
+- name: Create httpd
+  template:
+    src: httpd.j2
+    dest: /etc/logrotate.d/httpd

@@ -1,12 +1,12 @@
 {
-    "context_is_admin": "role:admin and (role:O__DC3__ServiceProvider or role:O__DC3__ServiceManager or role:O__DC3__ContractManager)",
-    "default": "rule:admin_or_neccs",
+    "context_is_admin": "(role:admin and (role:O__DC2__ServiceProvider or role:O__DC2__ServiceManager or role:O__DC2__ContractManager))",
+    "default": "rule:context_is_admin",
 
-    "neccs": "role:T__DC3__ProjectMember",
-    "admin_or_neccs": "rule:context_is_admin or rule:neccs",
+    "neccs": "role:T__DC2__ProjectMember",
+    "admin_or_neccs": "(rule:context_is_admin or rule:neccs)",
 
-    "add_image": "rule:context_is_admin",
-    "delete_image": "rule:context_is_admin",
+    "add_image": "rule:admin_or_neccs",
+    "delete_image": "rule:admin_or_neccs",
     "get_image": "rule:admin_or_neccs",
     "get_images": "rule:admin_or_neccs",
     "modify_image": "rule:admin_or_neccs",
@@ -37,27 +37,27 @@
     "reactivate": "rule:admin_or_neccs",
 
     "get_metadef_namespace": "rule:admin_or_neccs",
-    "get_metadef_namespaces":"rule:admin_or_neccs",
-    "modify_metadef_namespace":"rule:admin_or_neccs",
-    "add_metadef_namespace":"rule:admin_or_neccs",
+    "get_metadef_namespaces": "rule:admin_or_neccs",
+    "modify_metadef_namespace": "rule:admin_or_neccs",
+    "add_metadef_namespace": "rule:admin_or_neccs",
 
-    "get_metadef_object":"rule:admin_or_neccs",
-    "get_metadef_objects":"rule:admin_or_neccs",
-    "modify_metadef_object":"rule:admin_or_neccs",
-    "add_metadef_object":"rule:admin_or_neccs",
+    "get_metadef_object": "rule:admin_or_neccs",
+    "get_metadef_objects": "rule:admin_or_neccs",
+    "modify_metadef_object": "rule:admin_or_neccs",
+    "add_metadef_object": "rule:admin_or_neccs",
 
-    "list_metadef_resource_types":"rule:admin_or_neccs",
-    "get_metadef_resource_type":"rule:admin_or_neccs",
-    "add_metadef_resource_type_association":"rule:admin_or_neccs",
+    "list_metadef_resource_types": "rule:admin_or_neccs",
+    "get_metadef_resource_type": "rule:admin_or_neccs",
+    "add_metadef_resource_type_association": "rule:admin_or_neccs",
 
-    "get_metadef_property":"rule:admin_or_neccs",
-    "get_metadef_properties":"rule:admin_or_neccs",
-    "modify_metadef_property":"rule:admin_or_neccs",
-    "add_metadef_property":"rule:admin_or_neccs",
+    "get_metadef_property": "rule:admin_or_neccs",
+    "get_metadef_properties": "rule:admin_or_neccs",
+    "modify_metadef_property": "rule:admin_or_neccs",
+    "add_metadef_property": "rule:admin_or_neccs",
 
-    "get_metadef_tag":"rule:admin_or_neccs",
-    "get_metadef_tags":"rule:admin_or_neccs",
-    "modify_metadef_tag":"rule:admin_or_neccs",
-    "add_metadef_tag":"rule:admin_or_neccs",
-    "add_metadef_tags":"rule:admin_or_neccs"
+    "get_metadef_tag": "rule:admin_or_neccs",
+    "get_metadef_tags": "rule:admin_or_neccs",
+    "modify_metadef_tag": "rule:admin_or_neccs",
+    "add_metadef_tag": "rule:admin_or_neccs",
+    "add_metadef_tags": "rule:admin_or_neccs"
 }

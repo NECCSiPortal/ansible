@@ -1,0 +1,6 @@
+---
+# Configure DB
+- include: setting.yml
+  with_items: "{{ db_setting }}"
+  loop_control:
+    loop_var: db_name

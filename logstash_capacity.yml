@@ -1,4 +1,5 @@
 ---
 - hosts: logstash_capacity
+  become: yes
   roles:
     - logstash_capacity

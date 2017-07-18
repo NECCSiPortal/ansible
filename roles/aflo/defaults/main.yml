@@ -41,6 +41,19 @@ aflo:
     - ServiceProvider
     - ServiceManager
     - ContractManager
+  disinherited_users:
+    - aflo
+    - admin
+    - cinder
+    - ceilometer
+    - swift
+    - nova
+    - glance
+    - neutron
+    - heat
+    - keystone
+    - aodh
+    - gnocchi
 
 rabbitmq:
   nodes:
@@ -54,12 +67,6 @@ rabbitmq:
     name: guest
     pass: xxxx
   notification_exchange: aflo
-
-# setuptools
-setuptools:
-  name: setuptools
-  inequality: '>='
-  version: 25.1.1
 
 keystone:
   identity_uri: http://192.168.0.1:35357
