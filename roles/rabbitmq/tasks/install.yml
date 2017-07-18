@@ -1,0 +1,10 @@
+---
+- name: Install packages
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - name: lksctp-tools
+      state: present
+    - name: rabbitmq-server
+      state: present

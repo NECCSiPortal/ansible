@@ -1,0 +1,49 @@
+---
+- name: Install packages
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - name: gcc
+      state: present
+    - name: python-devel
+      state: present
+    - name: python-pip-7.1.0-1.el7
+      state: present
+    - name: MySQL-python
+      state: present
+    - name: git
+      state: present
+    - name: python-pbr
+      state: latest
+    - name: openssl-devel
+      state: latest
+    - name: python-babel
+      state: latest
+    - name: python-PyMySQL
+      state: latest
+    - name: python-sqlalchemy
+      state: latest
+    - name: python-sqlparse
+      state: latest
+    - name: python-openstackclient
+      state: present
+    - name: MariaDB-client
+      state: present
+  ignore_errors: yes
+
+- name: Upgrade pip(Use proxy)
+  command: 'pip install --upgrade pip --proxy={{ proxy }}'
+  when: proxy is defined
+
+- name: Upgrade pip(No use proxy)
+  command: pip install --upgrade pip
+  when: proxy is not defined
+
+- name: Install setuptools(Use proxy)
+  command: 'pip install {{ setuptools.name }}{{ setuptools.inequality }}{{ setuptools.version }} --proxy={{ proxy }}'
+  when: proxy is defined
+
+- name: Install setuptools(No use proxy)
+  command: 'pip install {{ setuptools.name }}{{ setuptools.inequality }}{{ setuptools.version }}'
+  when: proxy is not defined

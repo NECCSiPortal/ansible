@@ -1,0 +1,4 @@
+---
+- hosts: global_cms_serv
+  roles:
+    - drupal

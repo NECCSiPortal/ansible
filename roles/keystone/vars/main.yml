@@ -1,0 +1,7 @@
+---
+# Check
+script_dir: /tmp/deploy_check
+script_name: chk_keystone
+result_name: res_keystone
+result_fetch_dir: /tmp/deploy_result
+

@@ -1,0 +1,2 @@
+[global_cms_serv]
+host_name ansible_ssh_host=xx.xx.xx.xx_host user=root use_gui_setting=True

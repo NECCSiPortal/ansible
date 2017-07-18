@@ -1,0 +1,123 @@
+---
+is_master: False
+is_create_aflo_endpoint: False
+is_create_aflo_user: False
+is_create_sample_workflow_data: False
+
+region_type: region
+
+ap_path: /usr/share
+
+ip_port:
+  - 9294/tcp
+  - 5672/tcp
+  - 4369/tcp
+  - 25672/tcp
+  - 15672/tcp
+
+aflo_db:
+  host:
+    host: 192.168.0.1
+  db:
+    name: aflo
+    user: aflo
+    password: xxxx
+
+aflo:
+  service_name: ticket
+  endpoint:
+    - interface: admin
+      url: http://localhost:9294/
+      region: RegionOne
+    - interface: public
+      url: http://localhost:9294/
+      region: RegionOne
+    - interface: internal
+      url: http://localhost:9294/
+      region: RegionOne
+  region_name_list:
+    - DCX
+  role_name_list:
+    - ServiceProvider
+    - ServiceManager
+    - ContractManager
+
+rabbitmq:
+  nodes:
+    - name: server01
+      addr: 192.168.0.1
+      port: 5672
+    - name: server02
+      addr: 192.168.0.2
+      port: 5672
+  user:
+    name: guest
+    pass: xxxx
+  notification_exchange: aflo
+
+# setuptools
+setuptools:
+  name: setuptools
+  inequality: '>='
+  version: 25.1.1
+
+keystone:
+  identity_uri: http://192.168.0.1:35357
+  api_version: 3
+  auth_url: http://192.168.0.1:5000/v3
+  admin:
+    user_name: admin
+    password: xxxx
+    tenant_name: admin
+    region_name: RegionOne
+    tenant_id: xxxx
+    user_domain_id: default
+    project_domain_id: default
+    roles:
+      - _member_
+      - admin
+      - O__DCX__ServiceProvider
+  aflo:
+    user_name: aflo
+    password: xxxx
+    tenant_list:
+      - admin
+      - services
+
+mail:
+  encode: utf-8
+  from_address: 192.168.0.1
+  smtp_server: 192.168.0.1
+  user: aflo
+  password: xxxx
+
+announcement:
+  announcement_url: https://192.168.0.1
+
+ost_contract:
+  ost_roles: T__DCX__ObjectStore
+
+# sample workflow data
+sample:
+  aflo_data:
+    region:
+      - sample_insert_contract_workflow.sql
+      - sample_insert_catalog.sql
+      - sample_insert_flatrate_contract.sql
+      - sample_insert_payforuse_contract.sql
+      - sample_insert_change_contract.sql
+      - sample_insert_objectstorage_contract.sql
+    global:
+      - sample_insert_project_contract.sql
+      - sample_insert_add_announcement.sql
+      - sample_insert_inquiry.sql
+    role:
+      dc_name: DCX
+      service:
+        - O__DCX__ServiceManager
+      contract:
+        - O__DCX__ContractManager
+      system:
+        - O__DCX__ServiceProvider
+      member:
+        - T__DCX__ProjectMember

@@ -1,0 +1,55 @@
+---
+- name: Create log directory
+  file:
+    path: /var/log/rabbitmq
+    state: directory
+    owner: rabbitmq
+    group: rabbitmq
+    mode: 755
+
+- name: Create log file
+  file:
+    path: /var/log/rabbitmq/rabbit@{{ inventory_hostname }}-sasl.log
+    state: touch
+    owner: rabbitmq
+    group: rabbitmq
+    mode: 755
+
+- name: Start RabbitMQ
+  service:
+    name: rabbitmq-server
+    state: started
+
+- name: Enable Management Plugin
+  command: rabbitmq-plugins enable rabbitmq_management
+
+- name: Backup /etc/rabbitmq/rabbitmq.config
+  command: |
+    cp -p
+    /etc/rabbitmq/rabbitmq.config
+    /etc/rabbitmq/rabbitmq.config.org
+  args:
+    creates: /etc/rabbitmq/rabbitmq.config.org
+    removes: /etc/rabbitmq/rabbitmq.config
+
+- name: Backup /etc/rabbitmq/rabbitmq-env.conf
+  command: |
+    cp -p
+    /etc/rabbitmq/rabbitmq-env.conf
+    /etc/rabbitmq/rabbitmq-env.conf.org
+  args:
+    creates: /etc/rabbitmq/rabbitmq-env.conf.org
+    removes: /etc/rabbitmq/rabbitmq-env.conf
+
+- name: Create config files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/rabbitmq/{{ item }}"
+  with_items:
+    - rabbitmq.config
+    - rabbitmq-env.conf
+
+- name: Restart RabbitMQ
+  service:
+    name: rabbitmq-server
+    state: restarted

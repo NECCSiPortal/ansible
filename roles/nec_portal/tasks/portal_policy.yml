@@ -1,0 +1,20 @@
+---
+- name: Create policy.json for global portal
+  copy:
+    src: "{{ item }}_policy.json"
+    dest: "/etc/openstack-dashboard/{{ item }}_policy.json"
+  with_items:
+    - keystone
+
+- name: Create policy.json for region portal
+  template:
+    src: "{{ item }}_policy.json.j2"
+    dest: "/etc/openstack-dashboard/{{ item }}_policy.json"
+  with_items:
+    - nova
+    - glance
+    - cinder
+    - neutron
+    - heat
+    - ceilometer
+  when: region == 'region'

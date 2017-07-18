@@ -1,0 +1,24 @@
+---
+- name: Create directory for check
+  file:
+    path: "{{ script_dir }}"
+    state: directory
+
+- name: Copy check script
+  template:
+    src: check.sh.j2
+    dest: "{{ script_dir }}/{{ script_name }}.sh"
+    mode: 0755
+  ignore_errors: yes
+
+- name: Execute check script
+  command: "bash {{ script_dir }}/{{ script_name }}.sh"
+  ignore_errors: yes
+
+- name: Fetch Result
+  fetch:
+    src: "{{ script_dir }}/{{ result_name }}.log"
+    dest: "{{ result_fetch_dir }}/{{ ansible_hostname }}/{{ result_name }}_{{ item }}.log"
+    flat: yes
+  with_items: "{{ lookup('pipe','date +%Y%m%d_%H%M') }}"
+  ignore_errors: yes

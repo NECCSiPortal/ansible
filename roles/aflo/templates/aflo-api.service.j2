@@ -1,0 +1,9 @@
+[Unit]
+Description=Aflo-API
+
+[Service]
+Type=simple
+ExecStart=/bin/aflo-api --config-file={{ ap_path }}/Aflo/etc/aflo-api.conf
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+/var/log/rabbitmq/*.log
+{
+        su root root
+        daily
+        rotate 31
+        copytruncate
+        compress
+        missingok
+        notifempty
+}

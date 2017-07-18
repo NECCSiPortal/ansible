@@ -1,0 +1,21 @@
+---
+- name: Create portal_capacity_log.conf
+  template:
+    src: portal_capacity_log.conf.j2
+    dest: /etc/logstash/conf.d/portal_capacity_log.conf
+
+- name: Create directory to store capacity pattern
+  file:
+    state: directory
+    path: /opt/logstash/patterns
+    mode: u=rwx,g=rx,o=rx
+
+- name: Copy conf(grok-patterns)
+  copy:
+    src: grok-patterns
+    dest: /opt/logstash/patterns/
+
+- name: Copy conf(portal_pattern)
+  copy:
+    src: portal_pattern
+    dest: /opt/logstash/patterns/

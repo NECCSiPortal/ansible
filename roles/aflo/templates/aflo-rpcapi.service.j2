@@ -1,0 +1,9 @@
+[Unit]
+Description=Aflo-RPCAPI
+
+[Service]
+Type=simple
+ExecStart=/bin/aflo-rpcapi --config-file={{ ap_path }}/Aflo/etc/aflo-api.conf
+
+[Install]
+WantedBy=multi-user.target

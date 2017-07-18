@@ -1,0 +1,63 @@
+---
+- name: Copy Aflo-dashboard
+  copy:
+    src: Aflo-dashboard.tar.gz
+    dest: /root/
+
+- name: Decompress Aflo-dashboard
+  command: tar xvfz Aflo-dashboard.tar.gz
+  args:
+    chdir: /root/
+
+- name: Rename Aflo-dashboard
+  command: mv /root/Aflo-dashboard.git /root/Aflo-dashboard
+
+- name: Delete nec_portal_settings.py(aflo)
+  file:
+    path: /root/Aflo-dashboard/nec_portal/local/nec_portal_settings.py
+    state: absent
+
+- name: Process message file
+  shell: |
+    sed -e '{{ item.lines }}' /root/Aflo-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }} >> /root/NECCSPortal-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }}
+  with_items:
+    - "{{ process_message_file.aflo }}"
+
+- name: Delete message file
+  file:
+    path: /root/Aflo-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }}
+    state: absent
+  with_items:
+    - "{{ process_message_file.aflo }}"
+
+- name: Assemble source
+  command: |
+    cp -prf
+      /root/Aflo-dashboard/{{ item }}
+      /root/NECCSPortal-dashboard/
+  with_items:
+    - nec_portal
+    - openstack_dashboard
+
+- name: Create aflo_policy.json
+  template:
+    src: aflo_policy.json.j2
+    dest: /etc/openstack-dashboard/aflo_policy.json
+
+- name: Update aflo service name
+  command: sed -i -e "s/url = base.url_for(request, 'ticket')/url = base.url_for(request, '{{ aflo.service_name }}')/g" /root/NECCSPortal-dashboard/nec_portal/api/ticket.py
+
+- name: Update aflo service name(VARSIONS)
+  command: sed -i -e "s/VERSIONS = base.APIVersionManager(\"ticket\", preferred_version=2)/VERSIONS = base.APIVersionManager(\"{{ aflo.service_name }}\", preferred_version=2)/g" /root/NECCSPortal-dashboard/nec_portal/api/ticket.py
+
+- name: Update panel
+  command: sed -i -e "s/permissions = (\"openstack.services.ticket\",)/permissions = (\"openstack.services.{{ aflo.service_name }}\",)/g" /root/NECCSPortal-dashboard/nec_portal/dashboards/{{ item }}
+  with_items:
+    - project/ticket_list/panel.py
+    - project/private_price_lists/panel.py
+    - project/ticket_templates/panel.py
+    - project/contracts/panel.py
+    - admin/request_list/panel.py
+    - admin/ticket_list/panel.py
+    - admin/private_price_lists/panel.py
+    - admin/contracts/panel.py

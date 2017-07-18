@@ -1,0 +1,59 @@
+---
+- name: Copy Capacity
+  copy:
+    src: Capacity.tar.gz
+    dest: /tmp/
+
+- name: Decompress Capacity
+  command: tar xvfz Capacity.tar.gz chdir=/tmp/
+
+- name: Rename & Move Capacity
+  command: mv /tmp/Capacity.git {{ ap_path }}/Capacity
+
+- name: Delete Capacity.tar.gz
+  file:
+    path: /tmp/Capacity.tar.gz
+    state: absent
+  ignore_errors: yes
+
+- name: Create directory to store capacity log
+  file:
+    state: directory
+    path: /var/log/capacity/nova
+    mode: 0755
+
+- name: cron setting 1
+  shell: |
+    echo -e "PYTHONPATH=${PYTHONPATH}:{{ ap_path }}/Capacity" >> /var/spool/cron/root && touch {{ ap_path }}/Capacity/capacity_cron_set.txt
+  args:
+     creates: "{{ ap_path }}/Capacity/capacity_cron_set.txt"
+
+- name: cron setting 2
+  cron:
+    name: capacity client setting
+    state: present
+    minute: 0
+    hour: 0
+    job: python "{{ ap_path }}/Capacity/capacityclient/v1/nova_capacityobjs.py"
+
+- name: Backup config files
+  command: |
+    cp -p
+      {{ ap_path }}/Capacity/capacityclient/etc/{{ item }}
+      {{ ap_path }}/Capacity/capacityclient/etc/{{ item }}.org
+  args:
+    creates: "{{ ap_path }}/Capacity/capacityclient/etc/{{ item }}.org"
+    removes: "{{ ap_path }}/Capacity/capacityclient/etc/{{ item }}"
+  with_items:
+    - monitor.conf
+    - apacityclient-config.conf
+
+- name: Copy monitor.conf
+  copy:
+    src: monitor.conf
+    dest: "{{ ap_path }}/Capacity/capacityclient/etc/monitor.conf"
+
+- name: Create capacityclient-config.conf
+  template:
+    src: capacityclient-config.conf.j2
+    dest: "{{ ap_path }}/Capacity/capacityclient/etc/capacityclient-config.conf"

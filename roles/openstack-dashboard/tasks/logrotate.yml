@@ -1,0 +1,10 @@
+---
+- name: Copy openstack-dashboard
+  copy:
+    src: openstack-dashboard
+    dest: /etc/logrotate.d/
+
+- name: Copy httpd
+  copy:
+    src: httpd
+    dest: /etc/logrotate.d/

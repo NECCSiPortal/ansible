@@ -1,0 +1,10 @@
+---
+- name: Remove logrotate operation
+  file:
+    path: /etc/logrotate.d/rabbitmq-server
+    state: absent 
+
+- name: Create logrotate operation
+  copy:
+    src: dailyRotateRabbitmq
+    dest: /etc/logrotate.d/dailyRotateRabbitmq

@@ -1,0 +1,6 @@
+---
+- hosts: global_portal
+  roles:
+    - openstack-dashboard
+    - python-Afloclient
+    - nec_portal

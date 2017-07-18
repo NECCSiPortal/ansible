@@ -1,0 +1,57 @@
+---
+- name: Add Aflo service
+  shell: "openstack
+          --os-auth-url {{ keystone.auth_url }}
+          --os-identity-api-version {{ keystone.api_version }}
+          --os-interface internal
+          --os-username {{ keystone.admin.user_name }}
+          --os-password {{ keystone.admin.password }}
+          --os-project-name {{ keystone.admin.tenant_name }}
+          --os-domain-name {{ keystone.admin.project_domain_id }}
+          service create {{ aflo.service_name }} --name=aflo | grep id | awk '{print $4}'"
+  register: service_id
+  when: is_create_aflo_endpoint
+
+- name: Add Aflo endpoint
+  command: |
+    openstack
+      --os-auth-url {{ keystone.auth_url }}
+      --os-identity-api-version {{ keystone.api_version }}
+      --os-interface internal
+      --os-username {{ keystone.admin.user_name }}
+      --os-password {{ keystone.admin.password }}
+      --os-project-name {{ keystone.admin.tenant_name }}
+      --os-domain-name {{ keystone.admin.project_domain_id }}
+      endpoint create {{ service_id.stdout }} {{ item.interface }} {{ item.url }} --region {{ item.region }}
+  with_items:
+    - "{{ aflo.endpoint }}"
+  when: is_create_aflo_endpoint
+
+- name: Add Aflo user
+  command: |
+    openstack
+      --os-auth-url {{ keystone.auth_url }}
+      --os-identity-api-version {{ keystone.api_version }}
+      --os-interface internal
+      --os-username {{ keystone.admin.user_name }}
+      --os-password {{ keystone.admin.password }}
+      --os-project-name {{ keystone.admin.tenant_name }}
+      --os-domain-name {{ keystone.admin.project_domain_id }}
+      user create {{ keystone.aflo.user_name }} --password {{ keystone.aflo.password }}
+  when: region_type == 'global' and is_create_aflo_user
+
+- name: Add role to Aflo user
+  command: |
+    openstack
+      --os-auth-url {{ keystone.auth_url }}
+      --os-identity-api-version {{ keystone.api_version }}
+      --os-interface internal
+      --os-username {{ keystone.admin.user_name }}
+      --os-password {{ keystone.admin.password }}
+      --os-project-name {{ keystone.admin.tenant_name }}
+      --os-domain-name {{ keystone.admin.project_domain_id }}
+      role add {{ item[0] }} --user {{ keystone.aflo.user_name }} --project {{ item[1] }}
+  with_nested:
+    - "{{ keystone.admin.roles }}"
+    - "{{ keystone.aflo.tenant_list }}"
+  when: region_type == 'global' and is_create_aflo_user

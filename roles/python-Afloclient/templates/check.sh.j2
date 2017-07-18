@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DIR={{ script_dir }}
+FILE={{ result_name }}.log
+RESULT=${DIR}/${FILE}
+
+echo "-------------------------------------------------" >> ${RESULT}
+echo " Check Aflo Client " >> ${RESULT}
+echo "-------------------------------------------------" >> ${RESULT}
+
+
+# 1. Check Aflo client version
+echo "1. Check Aflo client version" >> ${RESULT}
+echo "$ aflo | grep usage" >> ${RESULT}
+aflo | grep usage 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}

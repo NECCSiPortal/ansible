@@ -1,0 +1,27 @@
+WSGIDaemonProcess dashboard group=apache processes=3 threads=10 user=apache
+WSGIProcessGroup dashboard
+WSGISocketPrefix run/wsgi
+
+WSGIScriptAlias /dashboard /usr/share/openstack-dashboard/openstack_dashboard/wsgi/django.wsgi
+Alias /dashboard/static /usr/share/openstack-dashboard/static
+Alias /static /usr/share/openstack-dashboard/static
+Alias /nec_portal_static /usr/share/openstack-dashboard/nec_portal/static
+
+<Directory /usr/share/openstack-dashboard/openstack_dashboard/wsgi>
+  Options All
+  AllowOverride All
+  Require all granted
+</Directory>
+
+<Directory /usr/share/openstack-dashboard/static>
+  Options All
+  AllowOverride All
+  Require all granted
+</Directory>
+
+RedirectMatch permanent  ^/$ /dashboard
+
+## Logging
+ErrorLog "/var/log/httpd/horizon_error.log"
+ServerSignature Off
+CustomLog "/var/log/httpd/horizon_access.log" combined

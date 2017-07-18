@@ -1,0 +1,22 @@
+---
+# firewall
+ip_port:
+  - 443/tcp
+  - 80/tcp
+
+# ssl
+setting_ssl: True
+ssl_crt_dir: /etc/httpd/conf/ssl.crt
+ssl_key_dir: /etc/httpd/conf/ssl.key
+ssl_crt_file: server.crt
+ssl_key_file: server.key
+
+# drupal
+drupal: drupal-7.44.tar.gz
+
+drupal_db:
+  server_ip: 192.168.0.1
+  username: drupal
+  password: xxxx
+
+use_gui_setting: False

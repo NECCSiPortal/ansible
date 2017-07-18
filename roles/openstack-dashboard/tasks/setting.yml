@@ -1,0 +1,16 @@
+---
+- name: Change Owner openstack-dashboard
+  file:
+    path: /usr/share/openstack-dashboard/static
+    owner: apache
+    group: apache
+    recurse: yes
+    state: directory
+
+- name: Create Log files
+  file:
+    path: /var/log/horizon/horizon.log
+    owner: apache
+    group: apache
+    state: touch
+    mode: 0666

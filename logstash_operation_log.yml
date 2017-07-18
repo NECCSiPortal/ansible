@@ -1,0 +1,4 @@
+---
+- hosts: logstash_operation_log
+  roles:
+    - logstash_operation_log

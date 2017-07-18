@@ -1,0 +1,4 @@
+---
+- hosts: logstash_capacity
+  roles:
+    - logstash_capacity

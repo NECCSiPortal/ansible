@@ -1,0 +1,25 @@
+---
+ip_port:
+  - 4369/tcp
+  - 5672/tcp
+  - 15672/tcp
+  - 25672/tcp
+
+rabbitmq:
+  master_node: server01
+  port: 5672
+  nodes:
+    - name: server01
+      addr: 192.168.0.1
+      port: 5672
+    - host: server02
+      addr: 192.168.0.2
+      port: 5672
+  erlang_cookie: RIELGKHKIOQWYPIIIHYJ
+  user:
+    name: guest
+    pass: xxxx
+  notification_exchange: aflo
+
+is_master: False
+is_use_rabbitmq_aflo: False

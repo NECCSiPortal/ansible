@@ -1,0 +1,16 @@
+---
+- name: Install packages
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - name: openstack-utils
+      state: present
+    - name: openstack-keystone
+      state: present
+    - name: python-keystoneclient
+      state: present
+    - name: python-openstackclient
+      state: present
+    - name: MariaDB-client
+      state: present

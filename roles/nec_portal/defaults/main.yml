@@ -1,0 +1,117 @@
+---
+# Disable unnecessary horizon default menu for global_portal
+is_disabled_menu:  True
+# Remove unnecessary neccs menu for global_portal
+is_remove_menu: True
+
+is_setting_ssl: True
+is_setting_httpd: True
+
+# region type: "region" or "global"
+region: region
+
+# IaaS policy
+policy:
+  region_name: DCX
+
+# Proxy
+proxy: http://192.168.0.1:8080
+
+ap_path: /usr/share
+python_directory: /usr/lib/python2.7
+
+ip_port:
+  - 443/tcp
+  - 80/tcp
+
+# ssl
+ssl_crt_dir: /etc/httpd/conf/ssl.crt
+ssl_key_dir: /etc/httpd/conf/ssl.key
+ssl_crt_file: server.crt
+ssl_key_file: server.key
+
+process_message_file:
+  lang_list:
+    - en
+    - ja
+  file_list:
+    - django.po
+    - djangojs.po
+  aflo:
+    - lines: 1,16d
+      lang: ja
+      file: django.po
+    - lines: 1,18d
+      lang: ja
+      file: djangojs.po
+    - lines: 1,16d
+      lang: en
+      file: django.po
+    - lines: 1,18d
+      lang: en
+      file: djangojs.po
+  announcement:
+    - lines: 1,5d
+      lang: ja
+      file: django.po
+    - lines: 1,5d
+      lang: en
+      file: django.po
+  self_identity:
+    - lines: 1,18d
+      lang: ja
+      file: django.po
+
+aflo:
+  service_name: ticket
+  region_name_list:
+    - DCX
+  role_name_list:
+    - ServiceProvider
+
+# keystone
+keystone:
+  host: 192.168.0.1
+  auth_url: http://192.168.0.1:5000/v3
+  default_role: _member_
+  admin:
+    username: admin
+    password: xxxx
+    project_name: admin
+
+announcement:
+  url: https://xx.xx/drupal/?q=user/login&destination=top
+
+kibana_url:
+  portal: https://portalkibana.xx.xx/
+  elk: https://kibana.xx.xx/
+
+links:
+  admin:
+    - name: Global Portal
+      url: https://globalportal.xx.xx/
+      description: To access the Global Portal.
+    - name: monitor
+      url: http://zabbixweb.xx.xx/zabbix/
+      description: Do monitered management.
+      role: O__DCX__ServiceProvider
+    - name: repository
+      url: https://gitlab.xx.xx/
+      description: Do centralized management of resource files.
+      role: O__DCX__ServiceManager
+    - name: Announce
+      url: https://drupal.xx.xx/drupal/?q=user/login
+      description: Announcement Management
+  project:
+    - name: Global Portal
+      url: https://globalportal.xx.xx/
+      description: To access the Global Portal.
+    - name: repository
+      description: Do centralized management of resource files.
+      url: https://gitlab.xx.xx/
+      role: C__Global__ProjectAdmin,T__DCX__ProjectMember
+
+is_use_aflo: true
+is_use_self_identity: true
+is_use_announcement: true
+is_use_cinder_backup: false

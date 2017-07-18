@@ -1,0 +1,34 @@
+#!/bin/bash
+
+DIR={{ script_dir }}
+FILE={{ result_name }}.log
+RESULT=${DIR}/${FILE}
+
+echo "-------------------------------------------------" > ${RESULT}
+echo " Check logstash_operation_log " >> ${RESULT}
+echo "-------------------------------------------------" >> ${RESULT}
+
+
+# 1. Check grok-patterns file
+echo "1. Check grok-patterns file" >> ${RESULT}
+echo "$ ls /opt/logstash/patterns/grok-patterns" >> ${RESULT}
+ls /opt/logstash/patterns/grok-patterns 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 2. Check portal_pattern file
+echo "2. Check portal_pattern file" >> ${RESULT}
+echo "$ ls /opt/logstash/patterns/portal_pattern" >> ${RESULT}
+ls /opt/logstash/patterns/portal_pattern 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 3. Check portal_history_log.conf file
+echo "3. Check portal_history_log.conf file" >> ${RESULT}
+echo "$ ls /etc/logstash/conf.d/portal_history_log.conf" >> ${RESULT}
+ls /etc/logstash/conf.d/portal_history_log.conf 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 4. Check logstash service
+echo "4. Check logstash service" >> ${RESULT}
+echo "$ systemctl status logstash" >> ${RESULT}
+systemctl status logstash 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}

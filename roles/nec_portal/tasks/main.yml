@@ -1,0 +1,14 @@
+---
+- include: install.yml
+  when: is_setting_ssl
+
+- include: firewall.yml
+
+- include: httpd.yml
+  when: is_setting_httpd
+
+- include: operation_log.yml
+
+- include: setting.yml
+
+- include: check.yml

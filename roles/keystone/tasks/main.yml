@@ -1,0 +1,21 @@
+---
+- include: install.yml
+  when: not is_create_allinone
+
+- include: logrotate.yml
+  when: not is_create_allinone
+
+- include: firewall.yml
+  when: not is_create_allinone
+
+- include: setting.yml
+  when: not is_create_allinone
+
+- include: initial_data.yml
+  when: is_create_initial_admin_data
+
+- include: add_sample_data.yml
+  when: is_create_sample_data
+
+- include: check.yml
+  when: not is_create_allinone

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DIR={{ script_dir }}
+FILE={{ result_name }}.log
+RESULT=${DIR}/${FILE}
+
+echo "-------------------------------------------------" >> ${RESULT}
+echo " Check Capacity Client " >> ${RESULT}
+echo "-------------------------------------------------" >> ${RESULT}
+
+
+# 1. Check Capacity client
+echo "1. Check Capacity client" >> ${RESULT}
+echo "$ ls {{ ap_path }}/Capacity/capacityclient/v1/ | grep nova_capacityobjs" >> ${RESULT}
+ls {{ ap_path }}/Capacity/capacityclient/v1/ | grep nova_capacityobjs 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 2. Check cron
+echo "2. Check cron" >> ${RESULT}
+echo "$ crontab -l" >> ${RESULT}
+ls crontab -l 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 3. Check Operation logrotate file
+echo "3. Check Operation logrotate file" >> ${RESULT}
+echo "$ ls -alR /etc/logrotate.d/ | grep -i dailyRotateCapacity" >> ${RESULT}
+ls -alR /etc/logrotate.d/ | grep -i dailyRotateCapacity 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}

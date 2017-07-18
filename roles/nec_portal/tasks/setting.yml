@@ -1,0 +1,162 @@
+---
+# Task: NECCS Portal
+##############################################################################
+
+- name: Copy NECCSPortal-dashboard
+  copy:
+    src: NECCSPortal-dashboard.tar.gz
+    dest: /root/
+
+- name: Decompress NECCSPortal-dashboard
+  command: tar xvfz NECCSPortal-dashboard.tar.gz
+  args:
+    chdir: /root/
+
+- name: Rename NECCSPortal-dashboard
+  command: mv /root/NECCSPortal-dashboard.git /root/NECCSPortal-dashboard
+
+- name: Delete nec_portal_settings.py(NECCSPortal)
+  file:
+    path: /root/NECCSPortal-dashboard/nec_portal/local/nec_portal_settings.py
+    state: absent
+
+- name: Delete _30_nec_portal.py(NECCSPortal)
+  file:
+    path: /root/NECCSPortal-dashboard/openstack_dashboard/local/local_settings.d/_30_nec_portal.py
+    state: absent
+
+- name: Create message file (if not exit)
+  file:
+    path: /root/NECCSPortal-dashboard/nec_portal/locale/{{ item[0] }}/LC_MESSAGES/{{ item[1] }}
+    state: touch
+  with_nested:
+    - "{{ process_message_file.lang_list }}"
+    - "{{ process_message_file.file_list }}"
+
+# Task: Additional compornent for NECCS Portal
+##############################################################################
+
+- include: portal_aflo.yml
+  when: is_use_aflo
+
+- include: portal_self_identity.yml
+  when: is_use_self_identity
+
+- include: portal_announcement.yml
+  when: is_use_announcement
+
+# Task: Merge NECCS Portal to OpenStack-dashboard
+##############################################################################
+
+- name: Copy NECCSPortal-dashboard files
+  command: |
+    cp -prf
+      /root/NECCSPortal-dashboard/nec_portal
+      /usr/share/openstack-dashboard/
+
+- name: Copy horizon files for NECCS Portal
+  command: |
+    cp -prf
+      /root/NECCSPortal-dashboard/horizon
+      {{ python_directory }}/site-packages/
+
+- name: Copy enabled files for NECCS Portal
+  command: |
+    cp -prf
+      /root/NECCSPortal-dashboard/openstack_dashboard/local/enabled
+      /usr/share/openstack-dashboard/openstack_dashboard/local/
+
+- name: Copy local_settings files for NECCS Portal
+  command: |
+    \cp -prf
+      /root/NECCSPortal-dashboard/openstack_dashboard/local/local_settings.d
+      /etc/openstack-dashboard/
+
+# Task: Create Configuration files
+##############################################################################
+
+- name: Copy theme files for NECCS Portal
+  command: |
+    cp -prf
+      /root/NECCSPortal-dashboard/openstack_dashboard/themes
+      /usr/share/openstack-dashboard/openstack_dashboard/
+
+- name: Backup files of openstack-dashboard
+  command: >-
+    cp -p
+      /usr/share/openstack-dashboard/openstack_dashboard/{{ item }}
+      /usr/share/openstack-dashboard/openstack_dashboard/{{ item }}.org
+  args:
+    creates: "/usr/share/openstack-dashboard/openstack_dashboard/{{ item }}.org"
+    removes: "/usr/share/openstack-dashboard/openstack_dashboard/{{ item }}"
+  with_items:
+    - local/local_settings.py
+
+- name: Create _30_nec_portal.py
+  template:
+    src: _30_nec_portal.py.j2
+    dest: /usr/share/openstack-dashboard/openstack_dashboard/local/local_settings.d/_30_nec_portal.py
+
+- name: Create local_settings.py
+  template:
+    src: local_settings.py.j2
+    dest: /usr/share/openstack-dashboard/openstack_dashboard/local/local_settings.py
+
+- name: Create nec_portal_settings.py
+  template:
+    src: nec_portal_settings.py.j2
+    dest: /usr/share/openstack-dashboard/nec_portal/local/nec_portal_settings.py
+
+- include: portal_menu.yml
+
+- include: portal_policy.yml
+
+# Task: Compile openstack-dashboard
+##############################################################################
+
+- name: Compile messages for openstack-dashboard
+  command: django-admin compilemessages
+  args:
+    chdir: /usr/share/openstack-dashboard/nec_portal/
+
+- name: Collect static resources for openstack-dashboard
+  command: python ./manage.py collectstatic --noinput
+  args:
+    chdir: /usr/share/openstack-dashboard/
+
+- name: Compress resources for openstack-dashboard
+  command: python ./manage.py compress --force
+  args:
+    chdir: /usr/share/openstack-dashboard/
+
+- name: Change owner of openstack-dashboard
+  file:
+    path: /usr/share/openstack-dashboard
+    owner: apache
+    group: apache
+    state: directory
+    recurse: yes
+
+- name: Change owner of log directory
+  file:
+    path: /var/log/horizon/
+    owner: apache
+    group: apache
+    state: directory
+    recurse: yes
+    mode: u=rwx,g=rx,o=rx
+
+- name: Create logrotate file
+  copy:
+    src: openstack-dashboard
+    dest: /etc/logrotate.d/openstack-dashboard
+
+# Task: Restart some services
+##############################################################################
+- name: Restart services
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - httpd
+    - memcached

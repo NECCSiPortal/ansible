@@ -1,0 +1,5 @@
+---
+- name: Copy Rotate Conf
+  copy:
+    src: dailyRotateCapacity
+    dest: /etc/logrotate.d

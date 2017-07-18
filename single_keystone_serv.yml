@@ -1,0 +1,4 @@
+---
+- hosts: single_keystone_serv
+  roles:
+    - keystone

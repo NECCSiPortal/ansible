@@ -1,0 +1,6 @@
+---
+# Check
+script_dir: /tmp/deploy_check
+script_name: chk_aflo
+result_name: res_aflo
+result_fetch_dir: /tmp/deploy_result

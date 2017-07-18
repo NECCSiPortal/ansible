@@ -1,0 +1,6 @@
+---
+- hosts: global_keystone_serv
+  roles:
+    - galera_mariadb
+    - keystone_db
+    - keystone

@@ -1,0 +1,15 @@
+---
+- name: Set sample workflow sql
+  template:
+    src: "{{ item }}.j2"
+    dest: "/tmp/{{ item }}"
+  with_items:
+    - "{{ sample.aflo_data[region_type] }}"
+  when: is_master
+
+- name: Add sample workflow data
+  shell: |
+    mysql -u {{ aflo_db.db.user }} -p{{ aflo_db.db.password }} -h {{ aflo_db.host.host }} {{ aflo_db.db.name }} < /tmp/{{ item }}
+  with_items:
+    - "{{ sample.aflo_data[region_type] }}"
+  when: is_master

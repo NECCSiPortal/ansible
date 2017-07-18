@@ -1,0 +1,48 @@
+---
+- name: Create patterns directory
+  file:
+    path: /opt/logstash/patterns/
+    owner: logstash
+    group: logstash
+    state: directory
+    recurse: yes
+    mode: u=rwx,g=rx,o=rx
+
+- name: Copy grok-patterns file
+  copy:
+    src: grok-patterns
+    dest: /opt/logstash/patterns/grok-patterns
+
+- name: Copy portal_pattern file
+  copy:
+    src: portal_pattern
+    dest: /opt/logstash/patterns/portal_pattern
+
+- name: Copy portal_history_log.conf file
+  template:
+    src: portal_history_log.conf.j2
+    dest: /etc/logstash/conf.d/portal_history_log.conf
+
+- name: Create log directory for logstash
+  file:
+    path: /var/log/logstash
+    owner: logstash
+    group: logstash
+    state: directory
+    mode: u=rwx,g=rx,o=rx
+
+- name: Create logstash_parse.err file
+  file:
+    path: /var/log/logstash/logstash_parse.err
+    owner: logstash
+    group: logstash
+    state: touch
+    mode: 0666
+
+- name: Start services
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - logstash
+  ignore_errors: yes

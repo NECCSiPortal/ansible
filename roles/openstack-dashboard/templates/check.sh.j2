@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DIR={{ script_dir }}
+FILE={{ result_name }}.log
+RESULT=${DIR}/${FILE}
+
+echo "-------------------------------------------------" >> ${RESULT}
+echo " Check Openstack Horizon " >> ${RESULT}
+echo "-------------------------------------------------" >> ${RESULT}
+
+
+# 1. Check Openstack package
+echo "1. Check Openstack package" >> ${RESULT}
+echo "$ rpm -qa | grep openstack" >> ${RESULT}
+rpm -qa | grep openstack 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 2. Check Openstack file owner for Kilo bug
+echo "2. Check Openstack file owner for Kilo bug" >> ${RESULT}
+echo "$ ls -alR /usr/share/openstack-dashboard/static" >> ${RESULT}
+ls -alR /usr/share/openstack-dashboard/static 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 3. Check openstack-dashboard.noarch version
+echo "3. Check openstack-dashboard.noarch version" >> ${RESULT}
+echo "$ yum info openstack-dashboard.noarch" >> ${RESULT}
+yum info openstack-dashboard.noarch 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}

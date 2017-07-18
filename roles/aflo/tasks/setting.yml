@@ -1,0 +1,73 @@
+---
+- name: Copy Aflo
+  copy:
+    src: Aflo.tar.gz
+    dest: /tmp/
+
+- name: Decompress Aflo
+  command: tar xvfz Aflo.tar.gz
+  args:
+    chdir: /tmp/
+
+- name: Rename & Move Aflo
+  command: mv /tmp/Aflo.git {{ ap_path }}/Aflo
+
+- name: Delete Aflo.tar.gz
+  file:
+    path: /tmp/Aflo.tar.gz
+    state: absent
+
+- name: Create log directory
+  file:
+    path: /var/log/aflo
+    state: directory
+
+- name: Install python package(Use proxy) retry
+  command: "pip install --proxy={{ proxy }} -r {{ ap_path }}/Aflo/requirements.txt"
+  when: proxy is defined
+
+- name: Install python package(No use proxy)
+  command: "pip install -r {{ ap_path }}/Aflo/requirements.txt"
+  when: (proxy is not defined) or (proxy == '')
+
+- name: Run setup.py
+  command: python setup.py install
+  args:
+    chdir: "{{ ap_path }}/Aflo"
+  notify:
+    - Restart services
+
+- name: Create policy.json
+  template:
+    src: policy.json.j2
+    dest: "{{ ap_path }}/Aflo/etc/policy.json"
+
+- name: Create aflo-api.conf
+  template:
+    src: aflo-api.conf.j2
+    dest: "{{ ap_path }}/Aflo/etc/aflo-api.conf"
+  notify:
+    - Restart services
+
+- name: Create service file
+  template:
+    src: "{{ item }}.j2"
+    dest: "/usr/lib/systemd/system/{{ item }}"
+  with_items:
+    - aflo-api.service
+    - aflo-rpcapi.service
+
+- name: Start services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - aflo-api
+    - aflo-rpcapi
+
+- name: Sync DB
+  command: "aflo-manage --config-file={{ ap_path }}/Aflo/etc/aflo-api.conf db_sync"
+  when: is_master
+  notify:
+    - Restart services

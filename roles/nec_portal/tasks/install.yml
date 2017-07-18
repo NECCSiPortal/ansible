@@ -1,0 +1,8 @@
+---
+- name: Install packages
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - name: mod_ssl
+      state: present

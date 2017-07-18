@@ -1,0 +1,115 @@
+#!/bin/bash
+
+DIR={{ script_dir }}
+FILE={{ result_name }}.log
+RESULT=${DIR}/${FILE}
+
+echo '-------------------------------------------------' >> ${RESULT}
+echo ' Check Drupal ' >> ${RESULT}
+echo '-------------------------------------------------' >> ${RESULT}
+
+
+# 1. Check Installed Apache
+echo '1. Check installed Apache' >> ${RESULT}
+echo '$ rpm -qa | grep httpd' >> ${RESULT}
+rpm -qa | grep httpd 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 2. Check Install PHP
+echo '2. Check Install PHP' >> ${RESULT}
+echo '$ rpm -qa | grep php-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 3. Check Install PHP-PDO
+echo '3. Check Install PHP-PDO' >> ${RESULT}
+echo '$ rpm -qa | grep php-pdo-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-pdo-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 4. Check Install PHP-GD
+echo '4. Check Install PHP-GD' >> ${RESULT}
+echo '$ rpm -qa | grep php-gd-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-gd-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 5. Check Install PHP-XML
+echo '5. Check Install PHP-XML' >> ${RESULT}
+echo '$ rpm -qa | grep php-xml-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-xml-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 6. Check Install PHP-PEAR
+echo '6. Check Install PHP-PEAR' >> ${RESULT}
+echo '$ rpm -qa | grep php-pear-1.9.4-21.el7.noarch' >> ${RESULT}
+rpm -qa | grep php-pear-1.9.4-21.el7.noarch 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 7. Check Install PHP-DEVEL
+echo '7. Check Install PHP-DEVEL' >> ${RESULT}
+echo '$ rpm -qa | grep php-devel-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-devel-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 8. Check Install PHP-MBSTRING
+echo '8. Check Install PHP-MBSTRING' >> ${RESULT}
+echo '$ rpm -qa | grep php-mbstring-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-mbstring-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 9. Check Install PHP-MYSQLND
+echo '9. Check Install PHP-MYSQLND' >> ${RESULT}
+echo '$ rpm -qa | grep php-mysqlnd-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-mysqlnd-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 10. Check Install PHP-COMMON
+echo '10. Check Install PHP-COMMON' >> ${RESULT}
+echo '$ rpm -qa | grep php-common-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-common-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 11. Check Install PHP-LDAP
+echo '11. Check Install PHP-LDAP' >> ${RESULT}
+echo '$ rpm -qa | grep php-ldap-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-ldap-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 12. Check Install PHP-PROCESS
+echo '12. Check Install PHP-PROCESS' >> ${RESULT}
+echo '$ rpm -qa | grep php-process-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-process-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 13. Check Install PHP-CLI
+echo '13. Check Install PHP-CLI' >> ${RESULT}
+echo '$ rpm -qa | grep php-cli-5.4.16-36.1.el7_2.1.x86_64' >> ${RESULT}
+rpm -qa | grep php-cli-5.4.16-36.1.el7_2.1.x86_64 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 14. Check Owner the Drupal File
+echo '14. Check Owner the Drupal File' >> ${RESULT}
+echo '$ ls -alR /var/www/html/drupal' >> ${RESULT}
+ls -alR /var/www/html/drupal 1>> ${RESULT} 2>&1
+echo '' >> ${RESULT}
+
+# 15. Check Access Drupal
+echo '15. Check Access Drupal' >> ${RESULT}
+for i in `seq 1 10`
+do
+  sleep 3
+  echo "$ curl -k -I -L https://localhost/drupal/ (${i})" >> ${RESULT}
+  curl -k -I -L https://localhost/drupal/ | grep "200 OK" 1>> ${RESULT} 2>&1
+  res=$?
+  echo '' >> ${RESULT}
+  if [ "$res" -eq "0" ]; then
+    echo "Expected result is returned" >> ${RESULT}
+    break
+  fi
+done
+
+# 16. Check port(443)
+echo '16. Check port(443)' >> ${RESULT}
+echo '$ fireall-cmd --list-all' >> ${RESULT}
+firewall-cmd --list-all 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}

@@ -1,0 +1,56 @@
+{
+    "context_is_admin": "role:admin and (role:O__{{ policy.region_name }}__ServiceProvider or role:O__{{ policy.region_name }}__ServiceManager or role:O__{{ policy.region_name }}__ContractManager)",
+    "admin_or_owner": "rule:context_is_admin or project_id:%(project_id)s",
+    "default": "rule:admin_or_neccs_owner",
+
+    "neccs": "role:T__{{ policy.region_name }}__ProjectMember",
+    "admin_or_neccs": "rule:context_is_admin or rule:neccs",
+    "admin_or_neccs_owner": "rule:context_is_admin or (rule:neccs and project_id:%(project_id)s)",
+
+    "add_image": "rule:context_is_admin",
+    "delete_image": "rule:context_is_admin",
+    "get_image": "rule:admin_or_neccs",
+    "get_images": "rule:admin_or_neccs",
+    "modify_image": "rule:admin_or_neccs_owner",
+    "publicize_image": "rule:admin_or_neccs",
+    "copy_from": "rule:admin_or_neccs",
+
+    "download_image": "rule:admin_or_neccs",
+    "upload_image": "rule:admin_or_neccs",
+
+    "delete_image_location": "rule:admin_or_neccs",
+    "get_image_location": "rule:admin_or_neccs",
+    "set_image_location": "rule:admin_or_neccs",
+
+    "add_member": "rule:admin_or_neccs",
+    "delete_member": "rule:admin_or_neccs",
+    "get_member": "rule:admin_or_neccs",
+    "get_members": "rule:admin_or_neccs",
+    "modify_member": "rule:admin_or_neccs",
+
+    "manage_image_cache": "rule:context_is_admin",
+
+    "get_task": "rule:admin_or_neccs",
+    "get_tasks": "rule:admin_or_neccs",
+    "add_task": "rule:admin_or_neccs",
+    "modify_task": "rule:admin_or_neccs",
+
+    "get_metadef_namespace": "rule:admin_or_neccs",
+    "get_metadef_namespaces":"rule:admin_or_neccs",
+    "modify_metadef_namespace":"rule:admin_or_neccs",
+    "add_metadef_namespace":"rule:admin_or_neccs",
+    "delete_metadef_namespace":"rule:admin_or_neccs",
+
+    "get_metadef_object":"rule:admin_or_neccs",
+    "get_metadef_objects":"rule:admin_or_neccs",
+    "modify_metadef_object":"rule:admin_or_neccs",
+    "add_metadef_object":"rule:admin_or_neccs",
+
+    "list_metadef_resource_types":"rule:admin_or_neccs",
+    "add_metadef_resource_type_association":"rule:admin_or_neccs",
+
+    "get_metadef_property":"rule:admin_or_neccs",
+    "get_metadef_properties":"rule:admin_or_neccs",
+    "modify_metadef_property":"rule:admin_or_neccs",
+    "add_metadef_property":"rule:admin_or_neccs"
+}

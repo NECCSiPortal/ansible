@@ -1,0 +1,44 @@
+---
+- name: Create admin_token
+  command: openssl rand -hex 16
+  register: admin_token
+
+- name: Bakcup keystone.conf
+  command: |
+    cp -p
+    /etc/keystone/keystone.conf
+    /etc/keystone/keystone.conf.org
+  args:
+    creates: /etc/keystone/keystone.conf.org
+    removes: /etc/keystone/keystone.conf
+
+- name: Create keystone.conf
+  template:
+    src: keystone.conf.j2
+    dest: /etc/keystone/keystone.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start keystone
+  service:
+    name: openstack-keystone
+    state: started
+    enabled: yes
+
+- name: Sync DB
+  command: su -s /bin/sh -c "keystone-manage db_sync" keystone
+  when: is_master
+
+- name: Create policy.json
+  copy:
+    src: policy.json
+    dest: /etc/keystone/policy.json
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Restart keystone
+  service:
+    name: openstack-keystone
+    state: restarted

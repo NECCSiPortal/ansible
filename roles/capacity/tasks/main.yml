@@ -1,0 +1,9 @@
+---
+# Configure the Capacity
+- include: setting.yml
+
+# Configure the logging
+- include: logrotate.yml
+
+# Execute the building check
+- include: check.yml

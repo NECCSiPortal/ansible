@@ -1,0 +1,51 @@
+---
+- name: Install HTTPD and ssl packages
+  yum:
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
+  with_items:
+    - name: httpd
+      state: present
+    - name: mod_ssl
+      state: present
+  when: setting_ssl
+
+- name: Install PHP packages
+  yum:
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
+  with_items:
+    - name: php
+      state: present
+    - name: php-pdo
+      state: present
+    - name: php-gd
+      state: present
+    - name: php-xml
+      state: present
+    - name: php-pear
+      state: present
+    - name: php-devel
+      state: present
+    - name: php-mbstring
+      state: present
+    - name: php-mysqlnd
+      state: present
+
+- name: httpd is enable
+  service:
+    name: '{{ item.name }}'
+    enabled: '{{ item.enabled }}'
+  with_items:
+    - name: httpd
+      enabled: yes
+  when: setting_ssl
+
+- name: Config for Apache Rewrite Settings
+  template:
+    src: drupal.conf.j2
+    dest: /etc/httpd/conf.d/drupal.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: setting_ssl

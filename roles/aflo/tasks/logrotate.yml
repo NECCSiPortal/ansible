@@ -1,0 +1,5 @@
+---
+- name: Create logrotate file
+  copy:
+    src: dailyRotateAflo
+    dest: /etc/logrotate.d/dailyRotateAflo

@@ -1,0 +1,21 @@
+{
+    "context_is_admin": "role:admin and (role:O__DC3__ServiceProvider or role:O__DC3__ServiceManager or role:O__DC3__ContractManager)",
+    "neccs": "role:T__DC3__ProjectMember",
+    "admin_or_neccs": "rule:context_is_admin or rule:neccs",
+
+    "segregation": "rule:context_is_admin",
+
+    "telemetry:get_samples": "rule:admin_or_neccs",
+    "telemetry:get_sample": "rule:admin_or_neccs",
+    "telemetry:query_sample": "rule:admin_or_neccs",
+    "telemetry:create_samples": "rule:admin_or_neccs",
+
+    "telemetry:compute_statistics": "rule:admin_or_neccs",
+    "telemetry:get_meters": "rule:admin_or_neccs",
+
+    "telemetry:get_resource": "rule:admin_or_neccs",
+    "telemetry:get_resources": "rule:admin_or_neccs",
+
+    "telemetry:events:index": "rule:admin_or_neccs",
+    "telemetry:events:show": "rule:admin_or_neccs"
+}

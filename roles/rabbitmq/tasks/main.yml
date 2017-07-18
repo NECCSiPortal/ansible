@@ -1,0 +1,18 @@
+---
+# Configure the firewall
+- include: firewall.yml
+
+# Install some Packages
+- include: install.yml
+
+# Configure the RabbitMQ
+- include: setting.yml
+
+# Configure the logging
+- include: logrotate.yml
+
+# Configure cluster
+- include: cluster.yml
+
+# Execute the building check
+- include: check.yml

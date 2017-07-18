@@ -1,0 +1,4 @@
+---
+- hosts: single_aflo_biz_db
+  roles:
+    - aflo_db

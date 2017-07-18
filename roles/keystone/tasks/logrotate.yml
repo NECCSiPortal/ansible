@@ -1,0 +1,5 @@
+---
+- name: Copy openstack-keystone
+  copy:
+    src: openstack-keystone
+    dest: /etc/logrotate.d/

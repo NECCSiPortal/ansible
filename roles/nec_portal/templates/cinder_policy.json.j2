@@ -1,0 +1,69 @@
+{
+    "context_is_admin": "(role:admin and (role:O__{{ policy.region_name }}__ServiceProvider or role:O__{{ policy.region_name }}__ServiceManager or role:O__{{ policy.region_name }}__ContractManager))",
+    "admin_or_owner":  "rule:context_is_admin or project_id:%(project_id)s",
+    "default": "rule:admin_or_neccs_owner",
+
+    "neccs": "role:T__{{ policy.region_name }}__ProjectMember",
+    "admin_or_neccs": "rule:context_is_admin or rule:neccs",
+    "admin_or_neccs_owner": "rule:context_is_admin or (rule:neccs and project_id:%(project_id)s)",
+
+    "admin_api": "rule:context_is_admin",
+
+    "volume:create": "rule:admin_or_neccs",
+    "volume:update": "rule:admin_or_neccs",
+    "volume:delete": "rule:admin_or_neccs_owner",
+    "volume:get_all": "rule:admin_or_neccs",
+    "volume:get_volume_metadata": "rule:admin_or_neccs",
+    "volume:get_volume_admin_metadata": "rule:admin_api",
+    "volume:delete_volume_admin_metadata": "rule:admin_api",
+    "volume:update_volume_admin_metadata": "rule:admin_api",
+    "volume:create_snapshot": "rule:admin_or_neccs_owner",
+    "volume:delete_snapshot": "rule:admin_or_neccs_owner",
+    "volume:get_snapshot": "rule:admin_or_neccs",
+    "volume:update_snapshot": "rule:admin_or_neccs_owner",
+    "volume:get_all_snapshots": "rule:admin_or_neccs",
+    "volume:extend": "!",
+    "volume:retype": "!",
+    "volume:upload_to_image": "rule:admin_or_neccs",
+
+    "volume_extension:types_manage": "rule:admin_api",
+    "volume_extension:types_extra_specs": "rule:admin_api",
+    "volume_extension:volume_type_encryption": "!",
+    "volume_extension:volume_encryption_metadata": "rule:admin_api",
+    "volume_extension:extended_snapshot_attributes": "rule:admin_or_neccs",
+    "volume_extension:volume_image_metadata": "rule:admin_or_neccs",
+
+    "volume_extension:quotas:show": "rule:admin_or_neccs",
+    "volume_extension:quotas:update": "rule:admin_api",
+    "volume_extension:quota_classes": "rule:admin_or_neccs",
+
+    "volume_extension:volume_manage": "!",
+    "volume_extension:volume_unmanage": "!",
+
+    "volume_extension:volume_admin_actions:reset_status": "rule:admin_api",
+    "volume_extension:snapshot_admin_actions:reset_status": "rule:admin_api",
+    "volume_extension:volume_admin_actions:force_delete": "rule:admin_api",
+    "volume_extension:snapshot_admin_actions:force_delete": "rule:admin_api",
+    "volume_extension:volume_admin_actions:migrate_volume": "!",
+    "volume_extension:volume_admin_actions:migrate_volume_completion": "rule:admin_api",
+
+    "volume_extension:volume_host_attribute": "rule:admin_api",
+    "volume_extension:volume_tenant_attribute": "rule:admin_api",
+    "volume_extension:volume_mig_status_attribute": "rule:admin_api",
+    "volume_extension:hosts": "rule:admin_api",
+    "volume_extension:services": "rule:admin_api",
+    "volume:services": "rule:admin_api",
+
+    "volume:create_transfer": "!",
+    "volume:accept_transfer": "!",
+    "volume:delete_transfer": "!",
+    "volume:get_all_transfers": "rule:admin_or_neccs",
+
+    "backup:create" : "rule:admin_or_neccs_owner",
+    "backup:delete": "rule:admin_or_neccs_owner",
+    "backup:get": "rule:admin_or_neccs",
+    "backup:get_all": "rule:admin_or_neccs",
+    "backup:restore": "rule:admin_or_neccs_owner",
+
+    "snapshot_extension:snapshot_actions:update_snapshot_status": "rule:admin_or_neccs"
+}

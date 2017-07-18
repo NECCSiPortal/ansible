@@ -1,0 +1,40 @@
+---
+- name: Copy self-identity-dashboard
+  copy:
+    src: self-identity-dashboard.tar.gz
+    dest: /root/
+
+- name: Decompress self-identity-dashboard
+  command: tar xvfz self-identity-dashboard.tar.gz
+  args:
+    chdir: /root/
+
+- name: Rename source
+  command: mv /root/self-identity-dashboard.git /root/self-identity-dashboard
+
+- name: Delete nec_portal_settings.py(self-identity)
+  file:
+    path: /root/self-identity-dashboard/nec_portal/local/nec_portal_settings.py
+    state: absent
+
+- name: Process message file(self-identity)
+  shell: |
+    sed -e '{{ item.lines }}' /root/self-identity-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }} >> /root/NECCSPortal-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }}
+  with_items:
+    - "{{ process_message_file.self_identity }}"
+
+- name: Delete message file(self-identity)
+  file:
+    path: /root/self-identity-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }}
+    state: absent
+  with_items:
+    - "{{ process_message_file.self_identity }}"
+
+- name: Assemble source(self-identity)
+  command: |
+    cp -prf
+      /root/self-identity-dashboard/{{ item }}
+      /root/NECCSPortal-dashboard/
+  with_items:
+    - nec_portal
+    - openstack_dashboard

@@ -1,0 +1,4 @@
+---
+- include: setting.yml
+
+- include: check.yml

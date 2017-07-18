@@ -1,0 +1,22 @@
+---
+- name: Create log directory
+  file:
+    path: /var/log/horizon/operation/
+    owner: root
+    group: root
+    state: directory
+    recurse: yes
+    mode: u=rwx,g=rx,o=rx
+
+- name: Create log files
+  file:
+    path: /var/log/horizon/operation/operation.log
+    owner: apache
+    group: apache
+    state: touch
+    mode: 0666
+
+- name: Create logrotate file
+  copy:
+    src: dailyRotateOperation
+    dest: /etc/logrotate.d/dailyRotateOperation

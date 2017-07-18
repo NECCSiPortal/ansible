@@ -1,0 +1,2 @@
+[logstash_capacity]
+host_name ansible_ssh_host=xx.xx.xx.xx_host ansible_ssh_user=root

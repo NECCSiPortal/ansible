@@ -1,0 +1,225 @@
+from django.utils.translation import ugettext_lazy as _
+
+# dashboard server's root url.
+DASHBOARD_SERVER = '{{ kibana_url.portal }}'
+
+# Announcement service server's top url
+ANNOUNCEMENT_SERVER = '{{ announcement.url }}'
+ANNOUNCEMENT_GROUP_NAME = _('Announcement')
+
+LOG_MANAGEMENT_GROUP_NAME = _('Log Management')
+LINK_GROUP_NAME = _('Link')
+
+# Logging service server's root url
+LOGGING_SERVICE_SERVER = '{{ kibana_url.elk }}'
+
+# Default retrieval period by a unit on a month for Kibana.
+DEFAULT_PERIOD = '1'
+
+# iframe src for admin/history.
+# %(start)s : set retrieval start day by views.py
+# %(end)s : set retrieval end day by views.py
+# %(seach)s : set keyword filter by views.py
+ADMIN_HISTORY_FRAME = \
+{% if region == "global" %}
+    DASHBOARD_SERVER + "/#/dashboard/portal-history-administrator?"\
+    "embed&_g=(refreshInterval:(display:Off,pause:!f,section:0,value:0),"\
+    "time:(from:'%(start)s',mode:absolute,to:'%(end)s'))&_a=(filters:!(),"\
+    "panels:!((col:1,id:portal-history-administrator,row:1,size_x:12,size_y:3,type:"\
+    "visualization),(col:1,columns:!(project_name,user_name,operation_type,"\
+    "operation_target,operation_message,request_parameter),"\
+    "id:portal-history-administrator,row:4,size_x:12,size_y:5,sort:!('@timestamp',"\
+    "desc),type:search)),query:(query_string:(analyze_wildcard:!t,query:"\
+    "'*%(search)s')),title:portal-history-administrator)"
+{% else %}
+    DASHBOARD_SERVER + "/#/dashboard/portal-history-project?"\
+    "embed&_g=(refreshInterval:(display:Off,pause:!f,section:0,value:0),"\
+    "time:(from:'%(start)s',mode:absolute,to:'%(end)s'))&_a=(filters:!(),"\
+    "panels:!((col:1,id:portal-history-project,row:1,size_x:12,size_y:3,type:"\
+    "visualization),(col:1,columns:!(project_name,user_name,operation_type,"\
+    "operation_target,operation_message,request_parameter),"\
+    "id:portal-history-project,row:4,size_x:12,size_y:5,sort:!('@timestamp',"\
+    "desc),type:search)),query:(query_string:(analyze_wildcard:!t,query:"\
+    "'*%(search)s')),title:portal-history-project)"
+{% endif %}
+
+# iframe src for project/history.
+# %(start)s : set retrieval start day by views.py
+# %(end)s : set retrieval end day by views.py
+# %(project_id)s : set project_id filter by views.py
+# %(seach)s : set keyword filter by views.py
+PROJECT_HISTORY_FRAME = \
+{% if region == "global" %}
+    DASHBOARD_SERVER + "/#/dashboard/portal-history-administrator?"\
+    "embed&_g=(refreshInterval:(display:Off,pause:!f,section:0,value:0),"\
+    "time:(from:'%(start)s',mode:absolute,to:'%(end)s'))&_a=(filters:!(),"\
+    "panels:!((col:1,id:portal-history-administrator,row:1,size_x:12,size_y:3,type:"\
+    "visualization),(col:1,columns:!(project_name,user_name,operation_type,"\
+    "operation_target,operation_message,request_parameter),"\
+    "id:portal-history-administrator,row:4,size_x:12,size_y:5,sort:!('@timestamp',"\
+    "desc),type:search)),query:(query_string:(analyze_wildcard:!t,query:"\
+    "'%(project_id)s%(search)s')),title:portal-history-administrator)"
+{% else %}
+    DASHBOARD_SERVER + "/#/dashboard/portal-history-project?"\
+    "embed&_g=(refreshInterval:(display:Off,pause:!f,section:0,value:0),"\
+    "time:(from:'%(start)s',mode:absolute,to:'%(end)s'))&_a=(filters:!(),"\
+    "panels:!((col:1,id:portal-history-project,row:1,size_x:12,size_y:3,type:"\
+    "visualization),(col:1,columns:!(project_name,user_name,operation_type,"\
+    "operation_target,operation_message,request_parameter),"\
+    "id:portal-history-project,row:4,size_x:12,size_y:5,sort:!('@timestamp',"\
+    "desc),type:search)),query:(query_string:(analyze_wildcard:!t,query:"\
+    "'%(project_id)s%(search)s')),title:portal-history-project)"
+{% endif %}
+
+# iframe src for admin/log_management.
+ADMIN_LOG_MANAGEMENT_FRAME = \
+    LOGGING_SERVICE_SERVER + "/#/discover?_g=(refreshInterval:("\
+    "display:Off,pause:!f,section:0,value:0),time:(from:now-"\
+    + DEFAULT_PERIOD + "M,mode:relative,to:now))&_a=(columns:!(_source),"\
+    "index:'portal-*',interval:auto,query:(query_string:("\
+    "analyze_wildcard:!t,query:'*')),sort:!('@timestamp',desc))"
+
+CAPACITY_GROUP_NAME = _('Capacity')
+
+NOVA_CAP_ADMIN_ALL_URL = \
+    "/#/dashboard/nova-capacity-all?embed&_g=(refreshInterval:(display:Off,"\
+    "pause:!f,section:0,value:0),time:(from:now-5M,mode:relative,to:now))&"\
+    "_a=(filters:!(),panels:!((col:1,id:Cpu-Usage,row:1,size_x:12,size_y:2,"\
+    "type:visualization),(col:1,id:Memory-Usage,row:3,size_x:12,size_y:2,"\
+    "type:visualization),(col:1,id:Disk-Usage,row:5,size_x:12,size_y:2,"\
+    "type:visualization),(col:1,id:Cpu-Quota,row:7,size_x:12,size_y:2,"\
+    "type:visualization),(col:1,id:Memory-Quota,row:9,size_x:12,size_y:2,"\
+    "type:visualization)),query:(query_string:(analyze_wildcard:!t,"\
+    "query:'%s')),title:nova-capacity-all)"
+
+NOVA_CAP_PROJECT_ALL_URL = \
+    "/#/dashboard/nova-capacity-project?embed&_g=(refreshInterval:(display:"\
+    "Off,pause:!f,section:0,value:0),time:(from:now-5M,mode:relative,to:now)"\
+    ")&_a=(filters:!(),panels:!((col:1,id:Cpu-Usage,row:1,size_x:12,"\
+    "size_y:2,type:visualization),(col:1,id:Memory-Usage,row:3,size_x:12,"\
+    "size_y:2,type:visualization),(col:1,id:Disk-Usage,row:5,size_x:12,"\
+    "size_y:2,type:visualization)),query:(query_string:(analyze_wildcard:"\
+    "!t,query:'%s')),title:nova-capacity-project)"
+
+NOVA_CAP_COMMON_URL = \
+    "/#/dashboard/nova-capacity-project?embed&_g=(refreshInterval:(display:"\
+    "Off,pause:!f,section:0,value:0),time:(from:now-4M,mode:relative,to:now)"\
+    ")&_a=(filters:!(),panels:!((col:1,id:Cpu-Usage,row:1,size_x:12,"\
+    "size_y:2,type:visualization),(col:1,id:Memory-Usage,row:3,size_x:12,"\
+    "size_y:2,type:visualization),(col:1,id:Disk-Usage,row:5,size_x:12,"\
+    "size_y:2,type:visualization)),query:(query_string:(analyze_wildcard:"\
+    "!t,query:'%s')),title:nova-capacity-project)"
+
+# Admin links list.
+# NOTE: If you want to add an external link,
+# please add the specified name description and url.
+#   name: Specifies the name of the external link.
+#   description: Specifies the description of the external link.
+#   url: Specifies the URL of the external link.
+ADMIN_LINKS = [
+{% for link in links.admin %}
+    {
+        'name': _('{{ link.name }}'),
+        'description': _('{{ link.description }}'),
+        'url': '{{ link.url }}',
+{% if link.role is defined %}
+        'role': '{{ link.role }}',
+{% endif %}
+    },
+{% endfor %}
+]
+
+# Project links list.
+# NOTE: If you want to add an external link,
+# please add the specified name description and url.
+#   name: Specifies the name of the external link.
+#   description: Specifies the description of the external link.
+#   url: Specifies the URL of the external link.
+PROJECT_LINKS = [
+{% for link in links.project %}
+    {
+        'name': _('{{ link.name }}'),
+        'description': _('{{ link.description }}'),
+        'url': '{{ link.url }}',
+{% if link.role is defined %}
+        'role': '{{ link.role }}',
+{% endif %}
+    },
+{% endfor %}
+]
+# After application of the NECCSPORTAL, please be postscript.
+REQUEST_GROUP_NAME = _('Request')
+CONTRACT_GROUP_NAME = _('Contract')
+CATALOG_GROUP_NAME = _('Catalog')
+
+CURRENCY_FORMAT = _('{0:,.2f}')
+CURRENCY_UNIT = _('USD')
+
+PRICE_FORMAT = [',', '.', 2]
+PRICE_UNIT = 'USD'
+
+{% if region == "region" %}
+SESSION_TIMEOUT = 3600
+{% endif %}
+
+# Region Contract links list.
+# NOTE: If you want to add an external link,
+# please add the specified name and url.
+#   name: Specifies the name of the external link.
+#   root_url: Specifies the ROOT URL(ex http://XXX.XXX.XXX.XXX/)
+#             of the external link.
+#   role: Specifies the roles for display links(ex ['A Role', 'B Role',]).
+# NOTICE: This setting is assumed
+#   that SSO(Single sign on) is enabled between sites of 'root_url'.
+REGION_CONTRACTS_LINKS = [
+{% if region == "global" %}
+{% for link in links.contract %}
+    {
+        'name': _('{{ link.name }}'),
+        'root_url': '{{ link.root_url }}',
+        'role': [
+{% for role in link.role %}
+            '{{ role }}',
+{% endfor %}
+        ]
+    },
+{% endfor %}
+{% endif %}
+]
+
+{% if is_use_self_identity %}
+KEYSTONE_ADMIN_SETTING = {
+    'username': '{{ keystone.admin.username }}',
+    'password': '{{ keystone.admin.password }}',
+    'tenant_name': '{{ keystone.admin.project_name }}',
+    'auth_url': '{{ keystone.auth_url }}'
+}
+
+DEFAULT_ROLES = "{{ keystone.default_role }}"
+DEFAULT_USER_ROLES = DEFAULT_ROLES
+DEFAULT_GROUP_ROLES = DEFAULT_ROLES
+
+TBL_ROLE_COMMON = {
+    'initial': 'C',
+    'policy': '',
+    'name': _('Common Roles'),
+}
+
+TBL_ROLE_OPERATOR = {
+    'initial': 'O',
+    'policy': 'admin',
+    'name': _('Operator Roles'),
+}
+
+TBL_ROLE_TENANT_USER = {
+    'initial': 'T',
+    'policy': '',
+    'name': _('Tenant User Roles'),
+}
+
+TBL_ROLE_ALL= [
+    TBL_ROLE_COMMON,
+    TBL_ROLE_OPERATOR,
+    TBL_ROLE_TENANT_USER,
+]
+{% endif %}

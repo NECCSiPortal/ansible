@@ -1,0 +1,38 @@
+---
+- name: install packages
+  yum:
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
+  with_items:
+    - name: gcc
+      state: present
+    - name: python-devel
+      state: present
+    - name: python-pip
+      state: present
+    - name: git
+      state: present
+    - name: python-pbr
+      state: latest
+    - name: openssl-devel
+      state: latest
+  ignore_errors: yes
+
+- name: Upgrade pip(Use proxy)
+  command: 'pip install --upgrade pip --proxy={{ proxy }}'
+  when: proxy is defined
+
+- name: Upgrade pip(No use proxy)
+  command: pip install --upgrade pip
+  when: proxy is not defined
+
+- name: Uninstall setuptools
+  command: pip uninstall -y setuptools
+
+- name: Install setuptools(Use proxy)
+  command: 'pip install {{ setuptools.name }}{{ setuptools.inequality }}{{ setuptools.version }} --proxy={{ proxy }}'
+  when: proxy is defined
+
+- name: Install setuptools(No use proxy)
+  command: 'pip install {{ setuptools.name }}{{ setuptools.inequality }}{{ setuptools.version }}'
+  when: proxy is not defined

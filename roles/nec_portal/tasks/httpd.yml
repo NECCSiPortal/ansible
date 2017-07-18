@@ -1,0 +1,50 @@
+---
+- name: Backup files for httpd
+  command: |
+    cp -p
+      /etc/httpd/{{ item }}
+      /etc/httpd/{{ item }}.org
+  args:
+    creates: "/etc/httpd/{{ item }}.org"
+    removes: "/etc/httpd/{{ item }}"
+  with_items:
+    - conf/httpd.conf
+    - conf.d/openstack-dashboard.conf
+    - conf.d/ssl.conf
+
+- name: Create httpd.conf
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+
+- name: Create openstack-dashboard.conf
+  template:
+    src: openstack-dashboard.conf.j2
+    dest: /etc/httpd/conf.d/openstack-dashboard.conf
+
+- name: Create directory for ssl
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0700
+  with_items:
+    - "{{ ssl_crt_dir }}"
+    - "{{ ssl_key_dir }}"
+
+- name: Copy file for ssl crt
+  copy:
+    src: "{{ ssl_crt_file }}"
+    dest: "{{ ssl_crt_dir }}/{{ ssl_crt_file }}"
+    mode: 0700
+
+- name: Copy file for ssl key
+  copy:
+    src: "{{ ssl_key_file }}"
+    dest: "{{ ssl_key_dir }}/{{ ssl_key_file }}"
+    mode: 0700
+
+- name: Create ssl.conf
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+  notify: Restart services

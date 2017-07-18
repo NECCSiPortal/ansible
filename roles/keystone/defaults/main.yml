@@ -1,0 +1,36 @@
+---
+ip_port:
+  - 5000/tcp
+  - 35357/tcp
+
+is_master: False
+is_create_sample_data: False
+is_create_allinone : False
+
+keystone:
+  region: RegionOne
+  publicurl: http://192.168.0.1:5000/v3
+  adminurl: http://192.168.0.1:35357/v3
+  internalurl: http://192.168.0.1:5000/v3
+  admin:
+    user_name: admin
+    password: xxxx
+    project: admin
+    role: admin
+    domain: default
+  api_version: 3
+
+keystone_db:
+  host:
+    host: 192.168.0.1
+    login_user: root
+    login_password: xxxx
+  db:
+    name: keystone
+    user: keystone
+    password: xxxx
+
+# sample role
+sample:
+  role:
+    dc_name: DCX

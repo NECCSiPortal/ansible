@@ -1,0 +1,59 @@
+---
+- name: Create keystone initial admin data
+  command: |
+    keystone-manage bootstrap
+      --bootstrap-password {{ keystone.admin.password }}
+      --bootstrap-username {{ keystone.admin.user_name }}
+      --bootstrap-project-name {{ keystone.admin.project }}
+      --bootstrap-role-name {{ keystone.admin.role }}
+      --bootstrap-service-name {{ keystone.service_name }}
+      --bootstrap-region-id {{ keystone.region }}
+      --bootstrap-admin-url {{ keystone.adminurl }}
+      --bootstrap-public-url {{ keystone.publicurl }}
+      --bootstrap-internal-url {{ keystone.internalurl }}
+  when: is_master
+
+- name: Add service project
+  command: |
+    openstack
+      --os-auth-url {{ keystone.internalurl }}
+      --os-identity-api-version {{ keystone.api_version }}
+      --os-interface internal
+      --os-username {{ keystone.admin.user_name }}
+      --os-password {{ keystone.admin.password }}
+      --os-project-name {{ keystone.admin.project }}
+      --os-domain-name {{ keystone.admin.domain_id }}
+      project create {{ item }}
+  with_items:
+    - service
+  when: is_master
+
+- name: Add role
+  command: |
+    openstack
+      --os-auth-url {{ keystone.internalurl }}
+      --os-identity-api-version {{ keystone.api_version }}
+      --os-interface internal
+      --os-username {{ keystone.admin.user_name }}
+      --os-password {{ keystone.admin.password }}
+      --os-project-name {{ keystone.admin.project }}
+      --os-domain-name {{ keystone.admin.domain_id }}
+      role create {{ item }}
+  with_items:
+    - _member_
+  when: is_master
+
+- name: add role to user with project
+  command: |
+    openstack
+      --os-auth-url {{ keystone.internalurl }}
+      --os-identity-api-version {{ keystone.api_version }}
+      --os-interface internal
+      --os-username {{ keystone.admin.user_name }}
+      --os-password {{ keystone.admin.password }}
+      --os-project-name {{ keystone.admin.project }}
+      --os-domain-name {{ keystone.admin.domain_id }}
+      role add {{ item }} --user {{ keystone.admin.user_name }} --project {{ keystone.admin.project }}
+  with_items:
+    - _member_
+  when: is_master

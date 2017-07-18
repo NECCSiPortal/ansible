@@ -1,0 +1,61 @@
+{
+{% set context_is_admin = [] %}
+{% for region_name in aflo.region_name_list %}
+{%   for role_name in aflo.role_name_list %}
+{%     set _ = context_is_admin.append('role:O__' + region_name + '__' + role_name) %}
+{%   endfor %}
+{% endfor %}
+    "context_is_admin": "role:admin and ({{ context_is_admin | join(' or ') }})",
+    "default": "",
+
+    "tickettemplates_index": "",
+    "tickettemplates_show": "",
+    "tickettemplates_create": "rule:context_is_admin",
+    "tickettemplates_delete": "rule:context_is_admin",
+
+    "workflowpatterns_create": "rule:context_is_admin",
+    "workflowpatterns_delete": "rule:context_is_admin",
+
+    "tickets_index": "",
+    "tickets_show": "",
+    "tickets_create": "",
+    "tickets_delete": "rule:context_is_admin",
+
+    "contract_create": "rule:context_is_admin",
+    "contract_delete": "rule:context_is_admin",
+    "contract_update": "rule:context_is_admin",
+    "contract_show": "",
+    "contract_list": "",
+
+    "goods_create": "rule:context_is_admin",
+    "goods_update": "rule:context_is_admin",
+    "goods_show": "",
+    "goods_list": "",
+    "goods_delete": "rule:context_is_admin",
+
+    "catalog_create": "rule:context_is_admin",
+    "catalog_update": "rule:context_is_admin",
+    "catalog_show": "",
+    "catalog_index": "",
+    "catalog_delete": "rule:context_is_admin",
+
+    "catalog_contents_create": "rule:context_is_admin",
+    "catalog_contents_update": "rule:context_is_admin",
+    "catalog_contents_show": "",
+    "catalog_contents_list": "",
+    "catalog_contents_delete": "rule:context_is_admin",
+
+    "catalog_scope_create": "rule:context_is_admin",
+    "catalog_scope_update": "rule:context_is_admin",
+    "catalog_scope_show": "",
+    "catalog_scope_index": "",
+    "catalog_scope_delete": "rule:context_is_admin",
+
+    "valid_catalog_list": "",
+
+    "price_create": "rule:context_is_admin",
+    "price_update": "rule:context_is_admin",
+    "price_show": "",
+    "price_index": "",
+    "price_delete": "rule:context_is_admin"
+}

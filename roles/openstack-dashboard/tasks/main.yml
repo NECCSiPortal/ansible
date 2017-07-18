@@ -1,0 +1,12 @@
+---
+# Install some Packages
+- include: install.yml
+
+# Configure the logging
+- include: logrotate.yml
+
+# Configure the OpenStack Dashboard
+- include: setting.yml
+
+# Execute the building check
+- include: check.yml

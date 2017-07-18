@@ -1,0 +1,23 @@
+---
+# Configure the firewall
+- include: firewall.yml
+
+# Install some Packages
+- include: install.yml
+
+# Configure the Aflo
+- include: setting.yml
+
+# Regesteration of keystone data
+- include: keystone.yml
+  when: is_master
+
+# Regesteration of sample data
+- include: add_sample_workflow.yml
+  when: is_create_sample_workflow_data
+
+# Configure the logging
+- include: logrotate.yml
+
+# Execute the building check
+- include: check.yml

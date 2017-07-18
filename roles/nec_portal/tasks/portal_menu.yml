@@ -1,0 +1,62 @@
+---
+- name: Disabled menu
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/share/openstack-dashboard/openstack_dashboard/local/enabled/{{ item }}"
+  with_items:
+    - _0001_project_overview_panel_remove.py
+    - _0002_project_instances_panel_remove.py
+    - _0003_project_volumes_panel_remove.py
+    - _0004_project_images_panel_remove.py
+    - _0005_project_network_topology_panel_remove.py
+    - _0006_project_network_panel_remove.py
+    - _0007_project_routers_panel_remove.py
+    - _0008_project_stacks_panel_remove.py
+    - _0009_project_resource_types_panel_remove.py
+    - _0010_project_containers_panel_remove.py
+    - _0011_project_access_panel_remove.py
+    - _33_admin_metering_panel_remove.py
+    - _34_admin_hypervisors_panel_remove.py
+    - _35_admin_aggregates_panel_remove.py
+    - _36_admin_instances_panel_remove.py
+    - _37_admin_volumes_panel_remove.py
+    - _38_admin_flavors_panel_remove.py
+    - _39_admin_images_panel_remove.py
+    - _40_admin_networks_panel_remove.py
+    - _41_admin_routers_panel_remove.py
+  when: region == 'global' and is_disabled_menu
+
+- name: Remove menu
+  file:
+    path: "/usr/share/openstack-dashboard/openstack_dashboard/local/enabled/{{ item }}"
+    state: absent
+  with_items:
+    - _2152_admin_add_infrastructure_log_panel.py
+    - _2310_admin_capacity_group_nec.py
+    - _2320_admin_capacity_capacity_panel_nec.py
+  when: region == 'global' and is_remove_menu
+
+- name: Update default panel
+  command: sed -i -e "s/DEFAULT_PANEL = 'overview'/DEFAULT_PANEL = 'info'/g" /usr/share/openstack-dashboard/openstack_dashboard/enabled/_2020_admin_overview_panel.py
+  when: region == 'global'
+
+- name: Update menu
+  lineinfile:
+    dest: "/usr/share/openstack-dashboard/openstack_dashboard/enabled/{{ item }}"
+    state: present
+    line: REMOVE_PANEL = True
+  with_items:
+    - _2020_admin_overview_panel.py
+    - _2120_admin_defaults_panel.py
+    - _2130_admin_metadata_defs_panel.py
+  when: region == 'global'
+
+- name: Update price menu
+  lineinfile:
+    dest: "/usr/share/openstack-dashboard/openstack_dashboard/local/enabled/{{ item }}"
+    state: present
+    line: REMOVE_PANEL = True
+  with_items:
+    - _5010_project_add_private_price_lists_panel.py
+    - _6010_admin_add_private_price_lists_panel.py
+  when: region == 'global'

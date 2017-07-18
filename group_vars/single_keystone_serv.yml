@@ -1,0 +1,23 @@
+---
+is_create_initial_admin_data: True
+is_create_sample_data: True
+is_create_allinone: True
+
+keystone:
+  region: RegionOne
+  service_name: keystone
+  publicurl: http://localhost:5000/v3
+  adminurl: http://localhost:35357/v3
+  internalurl: http://localhost:5000/v3
+  admin:
+    user_name: admin
+    password: xxxx
+    project: admin
+    role: admin
+    domain_id: default
+  api_version: 3
+
+# sample role
+sample:
+  role:
+    dc_name: DC3

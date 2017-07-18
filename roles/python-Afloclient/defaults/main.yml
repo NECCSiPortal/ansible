@@ -1,0 +1,6 @@
+---
+# setuptools
+setuptools:
+  name: setuptools
+  inequality: '>='
+  varsion: 25.1.1

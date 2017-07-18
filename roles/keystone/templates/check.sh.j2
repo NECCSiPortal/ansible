@@ -1,0 +1,41 @@
+#!/bin/bash
+
+DIR={{ script_dir }}
+FILE={{ result_name }}.log
+RESULT=${DIR}/${FILE}
+
+echo "-------------------------------------------------" >> ${RESULT}
+echo " Check Keystone " >> ${RESULT}
+echo "-------------------------------------------------" >> ${RESULT}
+
+
+# 1. Check Service
+echo "1. Check Service" >> ${RESULT}
+echo "$ systemctl status openstack-keystone" >> ${RESULT}
+systemctl status openstack-keystone 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 2. Check installed package
+echo "2. Check installed package" >> ${RESULT}
+echo "$ yum list installed | grep -e openstack -e keystone" >> ${RESULT}
+yum list installed | grep -e openstack -e keystone 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 3. Check access keystone
+echo "3. Check access keystone" >> ${RESULT}
+echo "$ curl -k -L http://localhost:5000/" >> ${RESULT}
+curl -k -L http://localhost:5000/ 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 4. Check update plicy.json
+echo "4. Check update plicy.json" >> ${RESULT}
+echo "$ grep prjadmin /etc/keystone/policy.json" >> ${RESULT}
+grep prjadmin /etc/keystone/policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+
+# 5. Check port(5000, 35357)
+echo "5. Check port(5000, 35357)" >> ${RESULT}
+echo "$ firewall-cmd --list-all" >> ${RESULT}
+firewall-cmd --list-all 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}

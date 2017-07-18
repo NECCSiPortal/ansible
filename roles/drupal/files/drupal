@@ -1,0 +1,10 @@
+/var/log/drupal/drupal.log
+{
+        su root root
+        daily
+        rotate 31
+        copytruncate
+        compress
+        missingok
+        notifempty
+}

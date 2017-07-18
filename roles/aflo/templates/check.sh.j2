@@ -1,0 +1,40 @@
+#!/bin/bash
+
+DIR={{ script_dir }}
+FILE={{ result_name }}.log
+RESULT=${DIR}/${FILE}
+
+echo "-------------------------------------------------" >> ${RESULT}
+echo " Check Aflo " >> ${RESULT}
+echo "-------------------------------------------------" >> ${RESULT}
+
+
+# 1. Check Aflo process(aflo-rpcapi)
+echo "1. Check Aflo process" >> ${RESULT}
+echo "$ service aflo-rpcapi status" >> ${RESULT}
+service aflo-rpcapi status 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 2. Check Aflo process(aflo-api)
+echo "2. Check Aflo process" >> ${RESULT}
+echo "$ service aflo-api status" >> ${RESULT}
+service aflo-api status 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 3. Check Aflo RestAPI
+echo "3. Check Aflo RestAPI" >> ${RESULT}
+echo "$ curl -L http://127.0.0.1:9294" >> ${RESULT}
+curl -L http://127.0.0.1:9294 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 4. Check Operation logrotate file
+echo "4. Check Operation logrotate file" >> ${RESULT}
+echo "$ ls -alR /etc/logrotate.d/ | grep -i dailyRotateAflo" >> ${RESULT}
+ls -alR /etc/logrotate.d/ | grep -i dailyRotateAflo 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 5. Check port(9294, 5672, 4369, 25672, 15672)
+echo "5. Check port(9294, 5672, 4369, 25672, 15672)" >> ${RESULT}
+echo "$ firewall-cmd --list-all" >> ${RESULT}
+firewall-cmd --list-all 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}

@@ -1,0 +1,64 @@
+---
+- name: Backup cluster hosts
+  command: |
+    cp -p
+      /etc/hosts
+      /etc/hosts.org
+  args:
+    creates: /etc/hosts.org
+    removes: /etc/hosts
+
+- name: backup .erlang.cookie backup
+  command: |
+    cp -p
+      /var/lib/rabbitmq/.erlang.cookie
+      /var/lib/rabbitmq/.erlang.cookie.org
+  args:
+    creates: /var/lib/rabbitmq/.erlang.cookie.org
+    removes: /var/lib/rabbitmq/.erlang.cookie
+  when: not is_master
+
+- name: Update hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: ".*{{ item.name }}$"
+    line: "{{ item.addr }} {{ item.name }} state=present"
+  with_items:
+    - "{{ rabbitmq.nodes }}"
+
+- name: Create .erlang.cookie
+  template:
+    src: .erlang.cookie.j2
+    dest: /var/lib/rabbitmq/.erlang.cookie
+
+- name: Restart RabbitMQ
+  service:
+    name: rabbitmq-server
+    state: restarted
+
+- name: Stop queue stop_app
+  command: rabbitmqctl stop_app
+
+- name: Reset queue
+  command: rabbitmqctl reset
+
+- name: Start queue start_app
+  command: rabbitmqctl start_app
+  when: is_master
+
+- name: Join cluster
+  command: rabbitmqctl join_cluster rabbit@{{ rabbitmq.master_node }}
+  when: not is_master
+
+- name: Start queue start_app
+  command: rabbitmqctl start_app
+  when: not is_master
+
+- name: Set queue policy
+  command: rabbitmqctl set_policy "AFLO_POLICY" "aflo_topic" '{"ha-mode":"all"}'
+  when: is_use_rabbitmq_aflo
+
+- name: Restart RabbitMQ
+  service:
+    name: rabbitmq-server
+    state: restarted

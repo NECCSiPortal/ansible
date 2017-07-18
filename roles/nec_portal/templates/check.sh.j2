@@ -1,0 +1,264 @@
+#!/bin/bash
+
+DIR={{ script_dir }}
+FILE={{ result_name }}.log
+RESULT=${DIR}/${FILE}
+
+echo "-------------------------------------------------" >> ${RESULT}
+echo " Check {{ region }} Portal " >> ${RESULT}
+echo "-------------------------------------------------" >> ${RESULT}
+
+
+# 1. Check installed Portal
+echo "1. Check installed Portal" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/nec_portal" >> ${RESULT}
+ls /usr/share/openstack-dashboard/nec_portal 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 2. Check https crt file
+echo "2. Check https crt file" >> ${RESULT}
+echo "$ ls /etc/httpd/conf/ssl.crt/ | grep -i server.crt" >> ${RESULT}
+ls /etc/httpd/conf/ssl.crt/ | grep -i server.crt 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 3. Check https key file
+echo "3. Check https key file" >> ${RESULT}
+echo "$ ls /etc/httpd/conf/ssl.key/ | grep -i server.key" >> ${RESULT}
+ls /etc/httpd/conf/ssl.key/ | grep -i server.key 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 4. Check Access horizon
+echo "4. Check Access horizon" >> ${RESULT}
+echo "$ curl -L -k https://localhost/dashboard/auth/login/?next=/dashboard/ | grep loginBtn" >> ${RESULT}
+curl -L -k https://localhost/dashboard/auth/login/?next=/dashboard/ | grep loginBtn 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 5. Check policy.json file
+echo "5. Check policy.json file" >> ${RESULT}
+
+# Check aflo_policy.json file
+echo "Check aflo_policy.json file" >> ${RESULT}
+echo "$ grep \"context_is_admin\" /etc/openstack-dashboard/aflo_policy.json" >> ${RESULT}
+grep \"context_is_admin\" /etc/openstack-dashboard/aflo_policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check keystone_policy.json file
+echo "Check keystone_policy.json file" >> ${RESULT}
+echo "$ grep \"prjadmin\" /etc/openstack-dashboard/keystone_policy.json" >> ${RESULT}
+grep \"prjadmin\" /etc/openstack-dashboard/keystone_policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+{% if region == "region" %}
+# Check ceilometer_policy.json file
+echo "Check ceilometer_policy.json file" >> ${RESULT}
+echo "$ grep \"context_is_admin\" /etc/openstack-dashboard/ceilometer_policy.json" >> ${RESULT}
+grep \"context_is_admin\" /etc/openstack-dashboard/ceilometer_policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check cinder_policy.json file
+echo "Check cinder_policy.json file" >> ${RESULT}
+echo "$ grep \"context_is_admin\" /etc/openstack-dashboard/cinder_policy.json" >> ${RESULT}
+grep \"context_is_admin\" /etc/openstack-dashboard/cinder_policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check glance_policy.json file
+echo "Check glance_policy.json file" >> ${RESULT}
+echo "$ grep \"context_is_admin\" /etc/openstack-dashboard/glance_policy.json" >> ${RESULT}
+grep \"context_is_admin\" /etc/openstack-dashboard/glance_policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check heat_policy.json file
+echo "Check heat_policy.json file" >> ${RESULT}
+echo "$ grep \"context_is_admin\" /etc/openstack-dashboard/heat_policy.json" >> ${RESULT}
+grep \"context_is_admin\" /etc/openstack-dashboard/heat_policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check neutron_policy.json file
+echo "Check neutron_policy.json file" >> ${RESULT}
+echo "$ grep \"context_is_admin\" /etc/openstack-dashboard/neutron_policy.json" >> ${RESULT}
+grep \"context_is_admin\" /etc/openstack-dashboard/neutron_policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check nova_policy.json file
+echo "Check nova_policy.json file" >> ${RESULT}
+echo "$ grep \"context_is_admin\" /etc/openstack-dashboard/nova_policy.json" >> ${RESULT}
+grep \"context_is_admin\" /etc/openstack-dashboard/nova_policy.json 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+{% endif %}
+
+# 6. Check remove.py file
+echo "6. Check remove.py file" >> ${RESULT}
+
+{% if region == "global" %}
+# Check _1020_project_overview_panel.py file
+echo "Check _1020_project_overview_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1020_project_overview_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1020_project_overview_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1030_project_instances_panel.py file
+echo "Check _1030_project_instances_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1030_project_instances_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1030_project_instances_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1040_project_volumes_panel.py file
+echo "Check _1040_project_volumes_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1040_project_volumes_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1040_project_volumes_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1050_project_images_panel.py file
+echo "Check _1050_project_images_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1050_project_images_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1050_project_images_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1420_project_network_topology_panel.py file
+echo "Check _1420_project_network_topology_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1420_project_network_topology_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1420_project_network_topology_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1430_project_network_panel.py file
+echo "Check _1430_project_network_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1430_project_network_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1430_project_network_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1440_project_routers_panel.py file
+echo "Check _1440_project_routers_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1440_project_routers_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1440_project_routers_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1620_project_stacks_panel.py file
+echo "Check _1620_project_stacks_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1620_project_stacks_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1620_project_stacks_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1630_project_resource_types_panel.py file
+echo "Check _1630_project_resource_types_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1630_project_resource_types_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1630_project_resource_types_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _1920_project_containers_panel.py file
+echo "Check _1920_project_containers_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1920_project_containers_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_1920_project_containers_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _33_admin_metering_panel_remove.py file
+echo "Check _33_admin_metering_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_33_admin_metering_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_33_admin_metering_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _34_admin_hypervisors_panel_remove.py file
+echo "Check _34_admin_hypervisors_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_34_admin_hypervisors_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_34_admin_hypervisors_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _35_admin_aggregates_panel_remove.py file
+echo "Check _35_admin_aggregates_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_35_admin_aggregates_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_35_admin_aggregates_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _36_admin_instances_panel_remove.py file
+echo "Check _36_admin_instances_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_36_admin_instances_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_36_admin_instances_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _37_admin_volumes_panel_remove.py file
+echo "Check _37_admin_volumes_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_37_admin_volumes_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_37_admin_volumes_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _38_admin_flavors_panel_remove.py file
+echo "Check _38_admin_flavors_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_38_admin_flavors_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_38_admin_flavors_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _39_admin_images_panel_remove.py file
+echo "Check _39_admin_images_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_39_admin_images_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_39_admin_images_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _40_admin_networks_panel_remove.py file
+echo "Check _40_admin_networks_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_40_admin_networks_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_40_admin_networks_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _41_admin_routers_panel_remove.py file
+echo "Check _41_admin_routers_panel_remove.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_41_admin_routers_panel_remove.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_41_admin_routers_panel_remove.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+{% endif %}
+
+# 7. Check not exist file
+echo "7. Check not exist file" >> ${RESULT}
+
+{% if region == "global" %}
+# Check _2152_admin_add_infrastructure_log_panel.py file
+echo "Check _2152_admin_add_infrastructure_log_panel.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_2152_admin_add_infrastructure_log_panel.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_2152_admin_add_infrastructure_log_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _2310_admin_capacity_group_nec.py file
+echo "Check _2310_admin_capacity_group_nec.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_2310_admin_capacity_group_nec.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_2310_admin_capacity_group_nec.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _2320_admin_capacity_capacity_panel_nec.py file
+echo "Check _2320_admin_capacity_capacity_panel_nec.py file" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_2320_admin_capacity_capacity_panel_nec.py" >> ${RESULT}
+ls /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_2320_admin_capacity_capacity_panel_nec.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+{% endif %}
+
+# 8. Check add REMOVE_PANEL
+echo "8. Check add REMOVE_PANEL" >> ${RESULT}
+
+{% if region == "global" %}
+# Check _5010_project_add_private_price_lists_panel.py file
+echo "Check _5010_project_add_private_price_lists_panel.py file" >> ${RESULT}
+echo "$ grep REMOVE_PANEL /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_5010_project_add_private_price_lists_panel.py" >> ${RESULT}
+grep REMOVE_PANEL /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_5010_project_add_private_price_lists_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# Check _6010_admin_add_private_price_lists_panel.py file
+echo "Check _6010_admin_add_private_price_lists_panel.py file" >> ${RESULT}
+echo "$ grep REMOVE_PANEL /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_6010_admin_add_private_price_lists_panel.py" >> ${RESULT}
+grep REMOVE_PANEL /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/_6010_admin_add_private_price_lists_panel.py 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+{% endif %}
+
+# 9. Check installed Portal(self-identity:projects(global only), aflo:ticket_list, announcement:announcement)
+echo "9. Check installed Portal(self-identity:projects(global only), aflo:ticket_list, announcement:announcement)" >> ${RESULT}
+echo "$ ls /usr/share/openstack-dashboard/nec_portal/dashboards/project" >> ${RESULT}
+ls /usr/share/openstack-dashboard/nec_portal/dashboards/project 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 10. Check port(443)
+echo "10. Check port(443)" >> ${RESULT}
+echo "$ firewall-cmd --list-all" >> ${RESULT}
+firewall-cmd --list-all 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}
+
+# 11. Check Operation logrotate file
+echo "11. Check Operation logrotate file" >> ${RESULT}
+echo "$ ls -alR /etc/logrotate.d/ | grep -i dailyRotateOperation" >> ${RESULT}
+ls -alR /etc/logrotate.d/ | grep -i dailyRotateOperation 1>> ${RESULT} 2>&1
+echo "" >> ${RESULT}

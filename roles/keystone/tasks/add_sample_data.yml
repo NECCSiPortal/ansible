@@ -1,0 +1,40 @@
+---
+- name: Add sample role
+  command: |
+    openstack
+      --os-auth-url {{ keystone.internalurl }}
+      --os-identity-api-version {{ keystone.api_version }}
+      --os-interface internal
+      --os-username {{ keystone.admin.user_name }}
+      --os-password {{ keystone.admin.password }}
+      --os-project-name {{ keystone.admin.project }}
+      --os-domain-name {{ keystone.admin.domain_id }}
+      role create {{ item }}
+  with_items:
+    - "C__Global__ProjectAdmin"
+    - "O__{{ sample.role.dc_name }}__ServiceManager"
+    - "O__{{ sample.role.dc_name }}__ContractManager"
+    - "O__{{ sample.role.dc_name }}__ServiceProvider"
+    - "T__{{ sample.role.dc_name }}__ProjectMember"
+    - "T__{{ sample.role.dc_name }}__ObjectStore"
+  when: is_master
+
+- name: add role to user with project
+  command: |
+    openstack
+      --os-auth-url {{ keystone.internalurl }}
+      --os-identity-api-version {{ keystone.api_version }}
+      --os-interface internal
+      --os-username {{ keystone.admin.user_name }}
+      --os-password {{ keystone.admin.password }}
+      --os-project-name {{ keystone.admin.project }}
+      --os-domain-name {{ keystone.admin.domain_id }}
+      role add {{ item }} --user {{ keystone.admin.user_name }} --project {{ keystone.admin.project }}
+  with_items:
+    - "C__Global__ProjectAdmin"
+    - "O__{{ sample.role.dc_name }}__ServiceManager"
+    - "O__{{ sample.role.dc_name }}__ContractManager"
+    - "O__{{ sample.role.dc_name }}__ServiceProvider"
+    - "T__{{ sample.role.dc_name }}__ProjectMember"
+    - "T__{{ sample.role.dc_name }}__ObjectStore"
+  when: is_master

@@ -1,0 +1,10 @@
+---
+- name: Copy Rotate Conf
+  copy:
+    src: drupal
+    dest: /etc/logrotate.d
+
+- name: Update Rotate Conf
+  copy:
+    src: httpd
+    dest: /etc/logrotate.d

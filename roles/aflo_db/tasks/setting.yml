@@ -1,0 +1,23 @@
+---
+- name: Create database
+  mysql_db:
+    login_user: "{{ aflo_db.host.login_user }}"
+    login_password: "{{ aflo_db.host.login_password }}"
+    name: "{{ aflo_db.db.name }}"
+    state: present
+  when: is_master
+
+- name: Add Aflo DB user and allow access to Aflo database
+  mysql_user:
+    login_user: "{{ aflo_db.host.login_user }}"
+    login_password: "{{ aflo_db.host.login_password }}"
+    name: "{{ aflo_db.db.user }}"
+    password: "{{ aflo_db.db.password }}"
+    host: "{{ item }}"
+    priv: "{{ aflo_db.db.name }}.*:ALL,GRANT"
+    state: present
+  with_items:
+    - "127.0.0.1"
+    - "%"
+    - "localhost"
+  when: is_master

@@ -1,0 +1,40 @@
+---
+- name: Copy announces-dashboard
+  copy:
+    src: announces-dashboard.tar.gz
+    dest: /root/
+
+- name: Decompress announces-dashboard
+  command: tar xvfz announces-dashboard.tar.gz
+  args:
+    chdir: /root/
+
+- name: Rename announces-dashboard
+  command: mv /root/announces-dashboard.git /root/announces-dashboard
+
+- name: Delete nec_portal_settings.py(announcement)
+  file:
+    path: /root/announces-dashboard/nec_portal/local/nec_portal_settings.py
+    state: absent
+
+- name: Process message file(announcement)
+  shell: |
+    sed -e '{{ item.lines }}' /root/announces-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }} >> /root/NECCSPortal-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }}
+  with_items:
+    - "{{ process_message_file.announcement }}"
+
+- name: Delete message file(announcement)
+  file:
+    path: /root/announces-dashboard/nec_portal/locale/{{ item.lang }}/LC_MESSAGES/{{ item.file }}
+    state: absent
+  with_items:
+    - "{{ process_message_file.announcement }}"
+
+- name: Assemble source(announcement)
+  command: |
+    cp -prf
+      /root/announces-dashboard/{{ item }}
+      /root/NECCSPortal-dashboard/
+  with_items:
+    - nec_portal
+    - openstack_dashboard

@@ -1,0 +1,10 @@
+---
+aflo_db:
+  host:
+    host: localhost
+    login_user: root
+    login_password: xxxx
+  db:
+    name: aflo
+    user: aflo
+    password: xxxx

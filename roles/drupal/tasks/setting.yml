@@ -1,0 +1,74 @@
+---
+- name: Copy a Drupal.tar.gz
+  copy:
+    src: "{{ drupal }}"
+    dest: /var/www/html/
+
+- name: Create Drupal Directory
+  file:
+    path: /var/www/html/drupal
+    state: directory
+    owner: apache
+    group: apache
+
+- name: Decompress drupal
+  command: chdir=/var/www/html/ tar xvfz "{{ drupal }}" -C drupal --strip-components 1
+
+- name: Remove drupal tar.gz
+  file:
+    path: "/var/www/html/{{ drupal }}"
+    state: absent
+
+- name: Create Drupal files Directory
+  file:
+    path: /var/www/html/drupal/sites/default/files/styles
+    state: directory
+    owner: apache
+    group: apache
+
+- name: Change owner of Drupal
+  file:
+    dest: /var/www/html/drupal
+    owner: apache
+    group: apache
+    recurse: yes
+
+- name: Config for Drupal DataBase Settings
+  template:
+    src: settings.php.j2
+    dest: /var/www/html/drupal/sites/default/settings.php
+    owner: apache
+    group: apache
+    mode: 0444
+
+- name: Create directory for ssl
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0700
+  with_items:
+    - "{{ ssl_crt_dir }}"
+    - "{{ ssl_key_dir }}"
+  when: setting_ssl
+
+- name: Copy ssl.crt
+  copy:
+    src: "{{ ssl_crt_file}}"
+    dest: "{{ ssl_crt_dir }}/{{ ssl_crt_file }}"
+    mode: 400
+  when: setting_ssl
+
+- name: Copy ssl.key
+  copy:
+    src: "{{ ssl_key_file}}"
+    dest: "{{ ssl_key_dir }}/{{ ssl_key_file }}"
+    mode: 400
+  when: setting_ssl
+
+- name: Restart httpd restart
+  service:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - name: httpd
+      state: restarted
