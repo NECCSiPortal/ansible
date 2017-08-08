@@ -30,6 +30,11 @@
   with_items:
     - "{{ process_message_file.announcement }}"
 
+- name: Delete _40_announcement.py(announcement)
+  file:
+    path: /root/announces-dashboard/openstack_dashboard/local/local_settings.d/_40_announcement.py
+    state: absent
+
 - name: Assemble source(announcement)
   command: |
     cp -prf

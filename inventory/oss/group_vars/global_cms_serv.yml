@@ -13,9 +13,11 @@ ssl_crt_file: server.crt
 ssl_key_file: server.key
 
 # drupal
-drupal: drupal-7.44.tar.gz
+drupal: drupal-7.56.tar.gz
 
 drupal_db:
   server_ip: "{{ hostvars[groups['global_biz_db'][0]].svint }}"
   username: drupal
   password: xxxx_drupa_user_pass
+
+portal_fqdn: "https://{{ hostvars[groups['global_portal'][0]].fqdn.portal }}/"
